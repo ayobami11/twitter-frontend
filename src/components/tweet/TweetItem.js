@@ -16,7 +16,7 @@ import axios from '../../axios';
 import { formatTimeElapsed } from '../../utils/formatTimeElapsed';
 import { setRgbaValue } from '../../utils/setRgbaValue';
 
-import Image from '../../assets/images/image.jpg';
+// import Image from '../../assets/images/image.jpg';
 
 const Li = styled.li`
     border-top: 1px solid ${({ theme }) => theme.colors['#2f3336']};

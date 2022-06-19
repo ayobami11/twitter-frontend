@@ -9,7 +9,7 @@ import styled from 'styled-components';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 
-import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
+// import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
 
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -18,7 +18,7 @@ import { Button } from '../general/Button';
 import axios from '../../axios';
 import ImagePreview from '../ImagePreview';
 
-import { setRgbaValue } from '../../utils/setRgbaValue';
+// import { setRgbaValue } from '../../utils/setRgbaValue';
 
 const Header = styled.header`
   display: flex;
@@ -67,14 +67,14 @@ const RemoveButton = styled(Button)`
     display: ${({ $images }) => $images ? 'block' : 'none'};
 `;
 
-const CameraAltOutlinedIconSC = styled(CameraAltOutlinedIcon)`
-color: ${({ theme }) => theme.colors.blue};
+// const CameraAltOutlinedIconSC = styled(CameraAltOutlinedIcon)`
+// color: ${({ theme }) => theme.colors.blue};
 
-  :hover {
-    /* background: ${({ theme }) => setRgbaValue(theme.colors.blue, 0.09)}; */
-  }
+//   :hover {
+//     /* background: ${({ theme }) => setRgbaValue(theme.colors.blue, 0.09)}; */
+//   }
 
-`;
+// `;
 
 // const Label = styled.label`
 //     border: none;

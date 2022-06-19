@@ -80,22 +80,22 @@ const Timestamp = styled.span`
     white-space: nowrap;
 `;
 
-const Menu = styled.menu`
-    display: flex;
-    justify-content: space-between;
+// const Menu = styled.menu`
+//     display: flex;
+//     justify-content: space-between;
 
-    margin-top: 0.75em;
-    max-width: 700px;
-`;
+//     margin-top: 0.75em;
+//     max-width: 700px;
+// `;
 
-const MenuItem = styled.li`
-    display: flex;
-    align-items: center;
-    gap: 0.5em;
+// const MenuItem = styled.li`
+//     display: flex;
+//     align-items: center;
+//     gap: 0.5em;
 
-    color: ${({ theme }) => theme.colors['#71767b']};
-    cursor: pointer;
-`;
+//     color: ${({ theme }) => theme.colors['#71767b']};
+//     cursor: pointer;
+// `;
 
 const FontAwesomeIconSC = styled(FontAwesomeIcon)`
     padding: 0.5em;
@@ -113,51 +113,51 @@ const EllipsisIcon = styled(FontAwesomeIconSC)`
     }
 `;
 
-const CommentIcon = styled(MenuItem)`
-    :hover {
-        svg {
-            background: ${({ theme }) => setRgbaValue(theme.colors.blue, 0.09)};
-        }
+// const CommentIcon = styled(MenuItem)`
+//     :hover {
+//         svg {
+//             background: ${({ theme }) => setRgbaValue(theme.colors.blue, 0.09)};
+//         }
 
-        path,
-        span {
-            color: ${({ theme }) => theme.colors.blue};
-        }
-    }
-`;
+//         path,
+//         span {
+//             color: ${({ theme }) => theme.colors.blue};
+//         }
+//     }
+// `;
 
-const RetweetIcon = styled(MenuItem)`
-    :hover {
-        svg {
-            background: ${({ theme }) =>
-        setRgbaValue(theme.colors.green, 0.09)};
-        }
+// const RetweetIcon = styled(MenuItem)`
+//     :hover {
+//         svg {
+//             background: ${({ theme }) =>
+//         setRgbaValue(theme.colors.green, 0.09)};
+//         }
 
-        path,
-        span {
-            color: ${({ theme }) => theme.colors.green};
-        }
-    }
-`;
-const LikeIcon = styled(MenuItem)`
-    :hover {
-        svg {
-            background: ${({ theme }) => setRgbaValue(theme.colors.pink, 0.09)};
-        }
+//         path,
+//         span {
+//             color: ${({ theme }) => theme.colors.green};
+//         }
+//     }
+// `;
+// const LikeIcon = styled(MenuItem)`
+//     :hover {
+//         svg {
+//             background: ${({ theme }) => setRgbaValue(theme.colors.pink, 0.09)};
+//         }
 
-        path,
-        span {
-            color: ${({ theme }) => theme.colors.pink};
-        }
-    }
-`;
+//         path,
+//         span {
+//             color: ${({ theme }) => theme.colors.pink};
+//         }
+//     }
+// `;
 
-const ShareIcon = styled(MenuItem)`
-    :hover {
-        background: ${({ theme }) => setRgbaValue(theme.colors.blue, 0.09)};
-        color: ${({ theme }) => theme.colors.blue};
-    }
-`;
+// const ShareIcon = styled(MenuItem)`
+//     :hover {
+//         background: ${({ theme }) => setRgbaValue(theme.colors.blue, 0.09)};
+//         color: ${({ theme }) => theme.colors.blue};
+//     }
+// `;
 
 const CommentItem = ({ message, handle, name, avatarUrl, verified, createdAt }) => {
     return (

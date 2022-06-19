@@ -14,8 +14,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 
 import axios from '../../axios';
 
-import { setRgbaValue } from '../../utils/setRgbaValue';
-
+// import { setRgbaValue } from '../../utils/setRgbaValue';
 
 import { ProfileContext } from '../../contexts/profile';
 
@@ -33,7 +32,7 @@ const Aside = styled.aside`
 
     width: ${({ $sidebarOpen }) => $sidebarOpen ? '300px' : '0'};
     opacity: ${({ $sidebarOpen }) => $sidebarOpen ? '1' : '0'};
-    height: ${({$sidebarOpen}) => $sidebarOpen ? '100%': '0'};
+    height: ${({ $sidebarOpen }) => $sidebarOpen ? '100%' : '0'};
     /* min-width: 300px; */
 
     transition: all 750ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
@@ -57,7 +56,7 @@ const ProfileInfo = styled.section`
 `;
 
 
-const Figure = styled.figure``;
+// const Figure = styled.figure``;
 
 const Figcaption = styled.figcaption`
     margin-top: .5em;

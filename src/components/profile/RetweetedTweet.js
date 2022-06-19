@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import Avatar from '@mui/material/Avatar';
 import VerifiedIcon from '@mui/icons-material/Verified';
 
-import { AppContext } from '../../contexts/app';
+// import { AppContext } from '../../contexts/app';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
