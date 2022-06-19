@@ -108,7 +108,7 @@ const Home = () => {
     }, [dispatch]);
 
     return (<>
-        {!profile ? (
+        {profile ? (
             <HomeContainer>
                 <Sidebar isSidebarOpen={isSidebarOpen} closeSidebar={closeSidebar} />
 
