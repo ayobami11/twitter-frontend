@@ -5,8 +5,6 @@ import styled from 'styled-components';
 const Images = styled.div`
     border-radius: .5em;
 
-    border: 1px solid red;
-
     margin: 1.5em auto;
     overflow: hidden;
 
