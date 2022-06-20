@@ -29,15 +29,19 @@ const TweetList = () => {
     }, [dispatch]);
 
     return (
-        <ul>
-            {tweets.map((tweet, index) => (
-                <TweetItem
-                    key={tweet._id}
-                    tweet={tweet}
-                    index={index}
-                />
-            ))}
-        </ul>
+        <>
+            {tweets.length ?
+                <ul>
+                    {tweets.map((tweet, index) => (
+                        <TweetItem
+                            key={tweet._id}
+                            tweet={tweet}
+                            index={index}
+                        />
+                    ))}
+                </ul> : <p>No tweets.</p>
+            }
+        </>
     );
 };
 
