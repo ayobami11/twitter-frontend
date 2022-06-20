@@ -2,6 +2,8 @@ import { useEffect, useContext } from 'react';
 
 import { useParams, useNavigate } from 'react-router-dom';
 
+import Linkify from 'react-linkify';
+
 import axios from '../../axios';
 
 import { Button } from '../general/Button'
@@ -79,8 +81,21 @@ const Handle = styled.span`
 `;
 
 const Bio = styled.p`
-color: ${({ theme }) => theme.colors['#e7e9ea']};
-margin: 1em 0;
+    color: ${({ theme }) => theme.colors['#e7e9ea']};
+    margin: 1em 0;
+
+    a {
+        color: ${({ theme }) => theme.colors.blue};
+        display: inline-block;
+        max-width: 200px;
+
+        /* fixes weird vertical misalignment to the top created when linkify renders links */
+        vertical-align: bottom;
+
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
 `;
 
 const ButtonSC = styled(Button)`
@@ -272,7 +287,13 @@ const UserProfile = () => {
                                     }
                                 </Figcaption>
                             </Figure>
-                            <Bio>{state.profile?.bio}</Bio>
+                            <Bio>
+                                <Linkify componentDecorator={(decoratedHref, decoratedText, key) =>
+                                    <a href={decoratedHref} target='_blank' key={key} rel="noreferrer">{decoratedText}</a>
+                                }>
+                                    {state.profile?.bio}
+                                </Linkify>
+                            </Bio>
 
                             <JoinDate><CalendarViewMonthIcon /> Joined {formatTweetDate(state.profile?.createdAt, true)}</JoinDate>
 

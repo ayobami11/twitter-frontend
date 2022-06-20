@@ -1,6 +1,10 @@
 export const initialState = {
     currentUserId: '',
     profile: null,
+    profileDetails: {
+        name: '',
+        bio: ''
+    },
     validationMessages: {
         name: '',
         bio: ''
@@ -18,14 +22,15 @@ export const reducer = (state, action) => {
 
             return {
                 ...state,
-                profile: action.payload.profile
+                profile: action.payload.profile,
+                profileDetails: { name: action.payload.profile.name, bio: action.payload.profile.bio }
             }
         }
 
         case 'UPDATE_PROFILE_DETAILS':
             return {
                 ...state,
-                profile: { ...state.profile, ...action.payload }
+                profileDetails: { ...state.profileDetails, ...action.payload }
             };
 
         case 'VALIDATE_PROFILE_DETAILS':

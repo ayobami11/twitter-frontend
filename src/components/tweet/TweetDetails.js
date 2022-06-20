@@ -1,8 +1,10 @@
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, Children } from 'react';
 
 import { Link, useParams } from 'react-router-dom';
 
 import styled from 'styled-components';
+
+import Linkify from 'react-linkify';
 
 import { TweetContext } from '../../contexts/tweet';
 
@@ -38,10 +40,6 @@ const Header = styled.header`
 const H2 = styled.h2``;
 
 const ArticleHeader = styled.header`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
     margin: 1em 0;
 `;
 
@@ -55,7 +53,11 @@ const Figure = styled.figure`
     gap: 1em;
 `;
 
-const Figcaption = styled.figcaption``;
+const Figcaption = styled.figcaption`
+    /* necessary to ensure text ellipsis works */
+    overflow: hidden;
+    width: 100%;
+`;
 
 const FontAwesomeIconSC = styled(FontAwesomeIcon)`
     padding: 0.5em;
@@ -66,27 +68,35 @@ const FontAwesomeIconSC = styled(FontAwesomeIcon)`
     cursor: pointer;
 `;
 
-const EllipsisIcon = styled(FontAwesomeIconSC)`
-    color: ${({ theme }) => theme.colors['#71767b']};
-
-    :hover {
-        background: ${({ theme }) => setRgbaValue(theme.colors.blue, 0.09)};
-        color: ${({ theme }) => theme.colors.blue};
-    }
-`;
-
 const Name = styled.p`
     color: ${({ theme }) => theme.colors['#e7e9ea']};
     font-weight: ${({ theme }) => theme.font.weights.bold};
+
+    display: flex;
+    align-items: center;
+    gap: .25em;
+    /* prevents flex parent from growing bigger than necessary */
+    max-width: fit-content;
+    
+    span {
+        flex: 1;
+
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 `;
 
 const VerifiedIconSC = styled(VerifiedIcon)`
     font-size: 1rem;
-    margin-left: 0.25em;
 `;
 
 const Handle = styled.p`
     color: ${({ theme }) => theme.colors['#71767b']};
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 `;
 
 const Engagements = styled.div`
@@ -126,6 +136,47 @@ const Time = styled.time`
     span {
         padding-right: 0.25em;
     }
+`;
+
+const Bio = styled.p`    
+    a {
+        color: ${({ theme }) => theme.colors.blue};
+        display: inline-block;
+        max-width: 200px;
+
+        /* fixes weird vertical misalignment to the top created when linkify renders links */
+        vertical-align: bottom;
+
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+`;
+
+const Images = styled.div`
+    --grid-gap: .5em;
+    --grid-column-count: 2;
+    --grid-item-min-width: 150px;
+
+    --gap-count: calc(var(--grid-column-count) - 1);
+    --total-gap-width: calc(var(--gap-count) * var(--grid-gap));
+    --grid-gap-max-width: calc((100% - var(--total-gap-width)) / var(--grid-column-count));
+
+    border-radius: .75em;
+    margin: 1.5em auto;
+    max-width: 550px;
+    overflow: hidden;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(max(var(--grid-item-min-width), var(--grid-gap-max-width)), 1fr));
+    gap: .5em;
+`;
+
+const Img = styled.img`
+     background: grey;
+    min-height: 100%;
+
+    aspect-ratio: 1 / 1;
 `;
 
 const Reactions = styled.div`
@@ -195,19 +246,6 @@ const LikeIcon = styled(Button)`
         path,
         span {
             color: ${({ theme }) => theme.colors.pink};
-        }
-    }
-`;
-
-const ShareIcon = styled(Button)`
-    :hover {
-        svg {
-            background: ${({ theme }) => setRgbaValue(theme.colors.blue, 0.09)};
-        }
-
-        path,
-        span {
-            color: ${({ theme }) => theme.colors.blue};
         }
     }
 `;
@@ -309,18 +347,31 @@ const TweetDetails = () => {
                                     <Figcaption>
                                         <Link to={`../${tweet.handle}`}>
                                             <Name>
-                                                {tweet.name}
+                                                <span>{tweet.name}</span>
+
                                                 {tweet.verified && <VerifiedIconSC />}
                                             </Name>
                                             <Handle>@{tweet.handle}</Handle>
                                         </Link>
                                     </Figcaption>
                                 </Figure>
-                                <Button>
-                                    <EllipsisIcon icon='fa-solid fa-ellipsis' />
-                                </Button>
                             </ArticleHeader>
-                            <p>{tweet.message}</p>
+                            <Bio>
+                                <Linkify componentDecorator={(decoratedHref, decoratedText, key) =>
+                                    <a href={decoratedHref} target='_blank' key={key} rel="noreferrer">{decoratedText}</a>
+                                }>
+                                    {tweet.message}
+                                </Linkify>
+                            </Bio>
+                            {tweet.images.length && (
+                                <Images>
+                                    {Children.toArray(tweet.images.map(imageUrl => <Img src={imageUrl} alt={`Tweet posted by @${tweet.handle}`} loading='lazy' />))}
+                                    {/* <Img src={Image} alt='' /> */}
+                                    {/* <Img src={Image} alt='' />
+                                <Img src={Image} alt='' />
+                                <Img src={Image} alt='' /> */}
+                                </Images>
+                            )}
                             <Time>
                                 <span>{formatTweetTime(tweet.createdAt)}</span>&middot;
                                 <span>{formatTweetDate(tweet.createdAt)}</span>
@@ -363,11 +414,6 @@ const TweetDetails = () => {
                                                     <FontAwesomeIconSC icon='fa-regular fa-heart' />
                                             }
                                         </LikeIcon>
-                                    </li>
-                                    <li>
-                                        <ShareIcon>
-                                            <FontAwesomeIconSC icon='fa-solid fa-arrow-up-from-bracket' />
-                                        </ShareIcon>
                                     </li>
                                 </Menu>
                             </Reactions>

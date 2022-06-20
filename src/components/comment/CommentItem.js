@@ -44,31 +44,22 @@ const Author = styled.div`
     align-items: center;
 `;
 
-const Name = styled.p`
+const Name = styled.h3`
     color: ${({ theme }) => theme.colors['#e7e9ea']};
     font-weight: ${({ theme }) => theme.font.weights.bold};
-
-    overflow: hidden;
-    text-overflow: ellipsis;
     white-space: nowrap;
 
-    display: inline-block;
-    /* max-width: 100px; */
-
-    border: 1px solid red;
+    > span {
+        margin-left: .25em;
+    }
 `;
+
 const Handle = styled.span`
     color: ${({ theme }) => theme.colors['#71767b']};
-    border: 1px solid red;
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
-    /* display: inline-block; */
-    /* min-width: 0;
-    width: 20%; */
+    display: block;
+    margin-top: .25em;
 `;
+
 const VerifiedIconSC = styled(VerifiedIcon)`
     font-size: 1rem;
     margin-left: 0.25em;
@@ -113,52 +104,6 @@ const EllipsisIcon = styled(FontAwesomeIconSC)`
     }
 `;
 
-// const CommentIcon = styled(MenuItem)`
-//     :hover {
-//         svg {
-//             background: ${({ theme }) => setRgbaValue(theme.colors.blue, 0.09)};
-//         }
-
-//         path,
-//         span {
-//             color: ${({ theme }) => theme.colors.blue};
-//         }
-//     }
-// `;
-
-// const RetweetIcon = styled(MenuItem)`
-//     :hover {
-//         svg {
-//             background: ${({ theme }) =>
-//         setRgbaValue(theme.colors.green, 0.09)};
-//         }
-
-//         path,
-//         span {
-//             color: ${({ theme }) => theme.colors.green};
-//         }
-//     }
-// `;
-// const LikeIcon = styled(MenuItem)`
-//     :hover {
-//         svg {
-//             background: ${({ theme }) => setRgbaValue(theme.colors.pink, 0.09)};
-//         }
-
-//         path,
-//         span {
-//             color: ${({ theme }) => theme.colors.pink};
-//         }
-//     }
-// `;
-
-// const ShareIcon = styled(MenuItem)`
-//     :hover {
-//         background: ${({ theme }) => setRgbaValue(theme.colors.blue, 0.09)};
-//         color: ${({ theme }) => theme.colors.blue};
-//     }
-// `;
-
 const CommentItem = ({ message, handle, name, avatarUrl, verified, createdAt }) => {
     return (
         <Li>
@@ -184,23 +129,6 @@ const CommentItem = ({ message, handle, name, avatarUrl, verified, createdAt }) 
                             <EllipsisIcon icon='fa-solid fa-ellipsis' />
                         </UserInfo>
                         <p>{message}</p>
-                        {/* <Menu>
-                            <CommentIcon>
-                                <FontAwesomeIconSC icon='fa-regular fa-comment' />
-                                <span>{commentCount}</span>
-                            </CommentIcon>
-                            <RetweetIcon>
-                                <FontAwesomeIconSC icon='fa-solid fa-retweet' />
-                                <span>{retweetCount}</span>
-                            </RetweetIcon>
-                            <LikeIcon>
-                                <FontAwesomeIconSC icon='fa-regular fa-heart' />
-                                <span>{likeCount}</span>
-                            </LikeIcon>
-                            <ShareIcon>
-                                <FontAwesomeIconSC icon='fa-solid fa-arrow-up-from-bracket' />
-                            </ShareIcon>
-                        </Menu> */}
                     </Figcaption>
                 </Figure>
             </article>

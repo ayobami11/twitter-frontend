@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 
+import Linkify from 'react-linkify';
+
 import Avatar from '@mui/material/Avatar';
 import VerifiedIcon from '@mui/icons-material/Verified';
 
@@ -19,7 +21,7 @@ import { setRgbaValue } from '../../utils/setRgbaValue';
 // import Image from '../../assets/images/image.jpg';
 
 const Li = styled.li`
-    border-top: 1px solid ${({ theme }) => theme.colors['#2f3336']};
+    border-bottom: 1px solid ${({ theme }) => theme.colors['#2f3336']};
     padding: 1em 5%;
 `;
 
@@ -29,7 +31,11 @@ const Figure = styled.figure`
 `;
 
 const Figcaption = styled.figcaption`
-    flex-basis: 100%;
+    /* flex-basis: 100%; */
+    
+    /* necessary to ensure text ellipsis works */
+    overflow: hidden;
+    width: 100%;
 `;
 
 const Images = styled.div`
@@ -52,41 +58,73 @@ const Images = styled.div`
 `;
 
 const Img = styled.img`
-    
-  
+    background: grey;
+    min-height: 100%;
+
+    aspect-ratio: 1 / 1;
 `;
 
 const UserInfo = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 2em;
+    gap: 1em;
 
     margin-bottom: .75em;
 
 `;
 
 const Author = styled.div`
+    /* ensures text ellipsis works properly */
+    overflow: hidden;
+    width: 100%;
+
 `;
 
-const Name = styled.h3`
+const Name = styled.p`
     color: ${({ theme }) => theme.colors['#e7e9ea']};
     font-weight: ${({ theme }) => theme.font.weights.bold};
-    white-space: nowrap;
 
-    > span {
-        margin-left: .25em;
+    display: flex;
+    align-items: center;
+    gap: .25em;
+    /* prevents flex parent from growing bigger than necessary */
+    max-width: fit-content;
+    
+    span {
+        flex: 1;
+
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 `;
 
-const Handle = styled.span`
-    color: ${({ theme }) => theme.colors['#71767b']};
-    display: block;
-    margin-top: .25em;
-`;
 const VerifiedIconSC = styled(VerifiedIcon)`
     font-size: 1rem;
-    margin-left: 0.25em;
+`;
+
+const Handle = styled.p`
+    color: ${({ theme }) => theme.colors['#71767b']};
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+`;
+
+const Bio = styled.p`    
+    a {
+        color: ${({ theme }) => theme.colors.blue};
+        display: inline-block;
+        max-width: 200px;
+
+        /* fixes weird vertical misalignment to the top created when linkify renders links */
+        vertical-align: bottom;
+
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
 `;
 
 const Button = styled.button`
@@ -167,6 +205,7 @@ const LikeIcon = styled(Reaction)`
 const Time = styled.time`
     color: ${({ theme }) => theme.colors['#71767b']};
     white-space: nowrap;
+    flex-shrink: 0;
 
     > span {
         margin-left: .5em;
@@ -189,9 +228,9 @@ const TweetItem = ({ tweet, index }) => {
     const navigate = useNavigate();
 
     const navigateToTweet = (event) => {
-        if (!event.target.classList.contains('reaction')
-            && ![...document.getElementsByClassName('reaction')]
-                .some(element => element.contains(event.target))) {
+        // Navigates to the tweet details page only when a link in the tweet or reaction (like, retweet) is not clicked
+        if (event.target.nodeName !== 'A' && !event.target.classList.contains('reaction')
+            && ![...document.getElementsByClassName('reaction')].some(element => element.contains(event.target))) {
             navigate(`../${tweet.handle}/status/${tweet._id}`);
         }
     }
@@ -260,20 +299,26 @@ const TweetItem = ({ tweet, index }) => {
 
                         <UserInfo>
                             <Author>
-
                                 <Name>
-                                    {tweet.name}
-                                    <span>
-                                        {tweet.verified && <VerifiedIconSC />}
-                                    </span>
+                                    <span>{tweet.name}</span>
+                                    {tweet.verified && <VerifiedIconSC />}
                                 </Name>
                                 <Handle>@{tweet.handle}</Handle>
                             </Author>
                             <Time>&middot;<span>{formatTimeElapsed(tweet.createdAt)}</span></Time>
                         </UserInfo>
-                        {tweet.message && <p>{tweet.message}</p>}
+                        {tweet.message && (
+                            <Bio>
+                                <Linkify componentDecorator={(decoratedHref, decoratedText, key) =>
+                                    <a href={decoratedHref} target='_blank' key={key} rel="noreferrer">{decoratedText}</a>
+                                }>
+                                    {tweet.message}
+                                </Linkify>
+                            </Bio>
+                        )
+                        }
 
-                        {tweet.images?.length && (
+                        {tweet.images.length && (
                             <Images>
                                 {Children.toArray(tweet.images.map(imageUrl => <Img src={imageUrl} alt={`Tweet posted by @${tweet.handle}`} loading='lazy' />))}
                                 {/* <Img src={Image} alt='' /> */}
@@ -312,7 +357,7 @@ const TweetItem = ({ tweet, index }) => {
                     </Figcaption>
                 </Figure>
             </article>
-        </Li>
+        </Li >
     );
 };
 

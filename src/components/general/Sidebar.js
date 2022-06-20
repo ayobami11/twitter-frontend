@@ -35,7 +35,7 @@ const Aside = styled.aside`
     height: ${({ $sidebarOpen }) => $sidebarOpen ? '100%' : '0'};
     /* min-width: 300px; */
 
-    transition: all 750ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+    transition: all 500ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
     overflow: hidden;
     line-height: 1.5;
 `;
@@ -62,28 +62,35 @@ const Figcaption = styled.figcaption`
     margin-top: .5em;
 `;
 
-
-
-
-const Name = styled(Link)`
+const Name = styled.p`
     color: ${({ theme }) => theme.colors['#e7e9ea']};
     font-weight: ${({ theme }) => theme.font.weights.bold};
-        display: block;
 
-    > span {
-        margin-left: .25em;
+    display: flex;
+    align-items: center;
+    gap: .25em;
+    /* prevents flex parent from growing bigger than necessary */
+    max-width: fit-content;
+    
+    span {
+        flex: 1;
+
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 `;
 
 const VerifiedIconSC = styled(VerifiedIcon)`
     font-size: 1rem;
-    margin-left: 0.25em;
 `;
 
-const Handle = styled(Link)`
+const Handle = styled.p`
     color: ${({ theme }) => theme.colors['#71767b']};
-    display: block;
-    margin-top: .25em;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 `;
 
 const CloseIconSC = styled(CloseIcon)`
@@ -171,27 +178,27 @@ const Sidebar = ({ isSidebarOpen, closeSidebar }) => {
                         />
                     </Link>
                     <Figcaption>
-                        <Name to={`../${profile?.handle}`}>
+                        <Link to={`../${profile?.handle}`}>
+                            <Name>
+                                <span>{profile?.name}</span>
 
-                            {profile?.name || 'Ayobami'} {true && <VerifiedIconSC />}
-                        </Name>
-                        <Handle to={`../${profile?.handle}`}>
-
-                            @{profile?.handle || 'ayobami11'}
-                        </Handle>
+                                {profile?.verified && <VerifiedIconSC />}
+                            </Name>
+                            <Handle>@{profile?.handle}</Handle>
+                        </Link>
                     </Figcaption>
                 </figure>
 
 
                 <FollowDetails>
-                    <div><Link to={`../${profile?.handle}/following`}><span>{profile?.following.length || 44}</span> Following</Link></div>
-                    <div><Link to={`../${profile?.handle}/followers`}><span>{profile?.followers.length || 20}</span> Followers</Link></div>
+                    <div><Link to={`../${profile?.handle}/following`}><span>{profile?.following.length}</span> Following</Link></div>
+                    <div><Link to={`../${profile?.handle}/followers`}><span>{profile?.followers.length}</span> Followers</Link></div>
                 </FollowDetails>
             </ProfileInfo>
             <Nav>
                 <ul>
                     <Li>
-                        <Link to={`../${profile?.handle}/profile`}>
+                        <Link to={`../${profile?.handle}`}>
                             <PermIdentityIcon />
                             Profile
                         </Link>

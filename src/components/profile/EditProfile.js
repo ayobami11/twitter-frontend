@@ -191,8 +191,8 @@ const EditProfile = () => {
             try {
                 const formData = new FormData();
 
-                formData.append('name', state.profile?.name);
-                formData.append('bio', state.profile?.bio);
+                formData.append('name', state.profileDetails.name);
+                formData.append('bio', state.profileDetails.bio);
                 formData.append('profile_picture', profilePicture);
 
                 const response = profilePicture?.name ?
@@ -201,7 +201,7 @@ const EditProfile = () => {
                             'Content-Type': 'multipart/form-data'
                         }
                     }) :
-                    await axios.put('/user/edit-profile', { name: state.profile?.name, bio: state.profile?.bio });
+                    await axios.put('/user/edit-profile', { name: state.profileDetails.name, bio: state.profileDetails.bio });
 
                 if (response?.data.success) {
                     appDispatch({ type: 'SET_ALERT', payload: { message: 'Profile updated successfully.' } })
@@ -275,7 +275,7 @@ const EditProfile = () => {
                             id='name'
                             type='text'
                             name='name'
-                            value={state.profile?.name ?? ''}
+                            value={state.profileDetails.name}
                             onChange={handleInputChange}
                             variant='filled'
                             label='Name'
@@ -291,7 +291,7 @@ const EditProfile = () => {
                             id='bio'
                             type='text'
                             name='bio'
-                            value={state.profile?.bio ?? ''}
+                            value={state.profileDetails.bio}
                             onChange={handleInputChange}
                             variant='filled'
                             label='Bio'

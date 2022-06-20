@@ -1,4 +1,4 @@
-import { Outlet, useMatch } from 'react-router-dom';
+import { Outlet, useMatch, useNavigate } from 'react-router-dom';
 
 import axios from './axios';
 
@@ -31,6 +31,7 @@ const ResetStyles = createGlobalStyle`
   }
 
   img {
+    height: auto;
     max-width: 100%;
     object-fit: cover;
   }
@@ -56,22 +57,24 @@ const GlobalStyles = createGlobalStyle`
 const App = () => {
   const loginMatch = useMatch('/login');
 
+  const navigate = useNavigate();
+
   axios.interceptors.response.use(
     function (config) {
       return config;
     }, function (error) {
       if (error.response?.status === 401 && !loginMatch) {
         // redirects all unauthorized users to login page
-        window.location = '/login';
+        navigate('/login');
       }
 
       return Promise.reject(error);
     });
 
   return (
-    <ThemeContextWrapper>
-      <AppContextWrapper>
-        <StyledEngineProvider injectFirst>
+    <StyledEngineProvider injectFirst>
+      <ThemeContextWrapper>
+        <AppContextWrapper>
           <ResetStyles />
           <GlobalStyles />
           <UserContextWrapper>
@@ -82,9 +85,9 @@ const App = () => {
               </ProfileContextWrapper>
             </TweetContextWrapper>
           </UserContextWrapper>
-        </StyledEngineProvider>
-      </AppContextWrapper>
-    </ThemeContextWrapper>
+        </AppContextWrapper>
+      </ThemeContextWrapper>
+    </StyledEngineProvider>
   );
 };
 
