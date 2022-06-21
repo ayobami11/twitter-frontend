@@ -17,8 +17,8 @@ export const Button = styled.button`
 
     align-self: flex-end;
 
-    :disabled {
-        filter: brightness(60%);
-        cursor: auto;
+    :hover {
+        /* darkens the background by adding a dark transparent layer */
+        background-image: linear-gradient(rgba(0, 0, 0, .1), rgba(0, 0, 0, .1));
     }
 `;

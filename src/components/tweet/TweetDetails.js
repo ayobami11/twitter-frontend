@@ -17,7 +17,6 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import CommentForm from '../comment/CommentForm';
 import CommentList from '../comment/CommentList';
 
-
 import { formatTweetTime } from '../../utils/formatTweetTime';
 import { formatTweetDate } from '../../utils/formatTweetDate';
 import { setRgbaValue } from '../../utils/setRgbaValue';
@@ -33,8 +32,20 @@ const Header = styled.header`
     top: 0;
     z-index: 2;
 
+    border-bottom: 1px solid ${({ theme }) => theme.colors['#2f3336']};
     background: ${({ theme }) => theme.colors.black};
     padding: 1em;
+`;
+
+const Tweet = styled.div`
+    max-width: 800px;
+    margin: 0 auto;
+
+    @media (min-width: 800px) {
+        border: 1px solid ${({ theme }) => theme.colors['#2f3336']};
+        border-radius: .5em;
+        margin: 1em auto;
+    }
 `;
 
 const H2 = styled.h2``;
@@ -93,6 +104,7 @@ const VerifiedIconSC = styled(VerifiedIcon)`
 
 const Handle = styled.p`
     color: ${({ theme }) => theme.colors['#71767b']};
+    margin-top: .25em;
 
     overflow: hidden;
     text-overflow: ellipsis;
@@ -134,7 +146,7 @@ const Time = styled.time`
     margin: 1em 0;
 
     span {
-        padding-right: 0.25em;
+        padding: 0 0.5em;
     }
 `;
 
@@ -327,22 +339,22 @@ const TweetDetails = () => {
 
     return (
         <>
+            <Header>
+                <Link to='../../../home'>
+                    <ArrowBackIcon />
+                </Link>
+                <H2>Tweet</H2>
+            </Header>
             {
                 tweet ? (
-                    <><Header>
-                        <Link to='../../../home'>
-                            <ArrowBackIcon />
-                        </Link>
-                        <H2>Tweet</H2>
-                    </Header>
-
+                    <Tweet>
                         <Article>
                             <ArticleHeader>
                                 <Figure>
                                     <Avatar
-                                        sx={{ width: 50, height: 50 }}
+                                        sx={{ width: 50, height: 50, background: 'hsl(0, 3%, 42%)' }}
                                         src={tweet.avatarUrl}
-                                        alt={`${tweet.handle} profile picture`}
+                                        alt=''
                                     />
                                     <Figcaption>
                                         <Link to={`../${tweet.handle}`}>
@@ -422,7 +434,7 @@ const TweetDetails = () => {
                         <CommentForm />
 
                         <CommentList comments={tweet.comments} />
-                    </>
+                    </Tweet>
                 )
                     :
                     <p>Tweet</p>

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
+import { AppContext } from '../contexts/app';
 import { ProfileContext } from '../contexts/profile';
 
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
@@ -12,7 +13,10 @@ import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 
+import { CircularProgressWithIcon } from './general/CircularProgressWithIcon';
+import { Button } from './general/Button';
 import Sidebar from './general/Sidebar';
+
 import TweetList from './tweet/TweetList';
 
 import axios from '../axios';
@@ -76,9 +80,28 @@ const AddCircleRoundedIconSC = styled(AddCircleRoundedIcon)`
 
 const H1 = styled.h1``;
 
+const ErrorContainer = styled.div`
+    margin: 2em;
+    text-align: center;
+
+    p {
+        font-size: 1.25rem;
+        font-weight: ${({ theme }) => theme.font.weights.bold};
+    }
+
+    button {
+        margin: 2em auto;
+    }
+`;
+
+const handleRefresh = () => window.location.reload();
+
+
 const Home = () => {
     const { state: { profile }, dispatch } = useContext(ProfileContext);
+    const { dispatch: appDispatch } = useContext(AppContext);
 
+    const [loading, setLoading] = useState(true);
     const [isSidebarOpen, setisSidebarOpen] = useState(false);
 
     const openSidebar = () => {
@@ -90,52 +113,69 @@ const Home = () => {
     }
 
     useEffect(() => {
-        const getUserProfile = async () => {
+        const getInitialData = async () => {
             try {
+                const response = await Promise.all([axios.get('/user'), axios.get('/tweets')]);
 
-                const response = await axios.get('/user');
+                if (Array.isArray(response)) {
+                    const [userResponse, tweetsResponse] = response;
 
-                if (response?.data.success) {
-                    dispatch({ type: 'SET_PROFILE', payload: { profile: response.data.user } })
+                    if (userResponse.data.success) {
+                        dispatch({ type: 'SET_PROFILE', payload: { profile: userResponse.data.user } })
+                    }
+
+                    if (tweetsResponse.data.success) {
+                        appDispatch({ type: 'SET_TWEETS', payload: { tweets: tweetsResponse.data.tweets } });
+
+                        appDispatch({ type: 'SET_CURRENT_USER_ID', payload: { currentUserId: tweetsResponse.data.currentUserId } });
+                    }
                 }
             } catch (error) {
-                console.log(error)
+                console.log(error);
+            } finally {
+                setLoading(false);
+
             }
         }
 
-        getUserProfile();
+        getInitialData();
+    }, [appDispatch, dispatch])
 
-    }, [dispatch]);
+    return (
+        <>
+            {
+                loading ? <CircularProgressWithIcon /> : profile ? (
+                    <HomeContainer>
+                        <Sidebar isSidebarOpen={isSidebarOpen} closeSidebar={closeSidebar} />
 
-    return (<>
-        {profile ? (
-            <HomeContainer>
-                <Sidebar isSidebarOpen={isSidebarOpen} closeSidebar={closeSidebar} />
+                        <Header>
+                            <Div>
+                                <IconButton onClick={openSidebar}>
 
-                <Header>
-                    <Div>
-                        {/* <Link to={`../${profile?.handle}`}> */}
-                        <IconButton onClick={openSidebar}>
-
-                            <Avatar
-                                sx={{ width: 50, height: 50 }}
-                                src={profile?.avatarUrl ?? ''}
-                                alt={`${profile?.handle ?? ''} profile picture`}
-                            />
-                        </IconButton>
-                        {/* </Link> */}
-                        <H1>Home</H1>
-                    </Div>
-                    <AutoAwesomeIcon />
-                </Header >
-                <Main>
-                    <TweetList />
-                    <TweetLink to='../tweet'>
-                        <AddCircleRoundedIconSC />
-                    </TweetLink>
-                </Main>
-            </HomeContainer>
-        ) : null}</>
+                                    <Avatar
+                                        sx={{ width: 50, height: 50 }}
+                                        src={profile?.avatarUrl ?? ''}
+                                        alt={`${profile?.handle ?? ''} profile picture`}
+                                    />
+                                </IconButton>
+                                <H1>Home</H1>
+                            </Div>
+                            <AutoAwesomeIcon />
+                        </Header >
+                        <Main>
+                            <TweetList />
+                            <TweetLink to='../tweet'>
+                                <AddCircleRoundedIconSC />
+                            </TweetLink>
+                        </Main>
+                    </HomeContainer>
+                ) : (
+                    <ErrorContainer>
+                        <p>Something went wrong, but don't fret - it's not your fault.</p>
+                        <Button onClick={handleRefresh}>Refresh</Button>
+                    </ErrorContainer>
+                )}
+        </>
     );
 };
 

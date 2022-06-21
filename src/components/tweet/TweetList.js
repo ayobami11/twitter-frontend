@@ -1,5 +1,4 @@
-import { useEffect, useContext } from 'react';
-import axios from '../../axios';
+import { useContext } from 'react';
 
 import { AppContext } from '../../contexts/app';
 
@@ -7,26 +6,8 @@ import TweetItem from '../tweet/TweetItem';
 
 const TweetList = () => {
     const {
-        state: { tweets }, dispatch
+        state: { tweets }
     } = useContext(AppContext);
-
-    useEffect(() => {
-        const getTweets = async () => {
-            try {
-                const response = await axios.get('/tweets');
-
-                if (response?.data.success) {
-                    dispatch({ type: 'SET_TWEETS', payload: { tweets: response.data.tweets } });
-
-                    dispatch({ type: 'SET_CURRENT_USER_ID', payload: { currentUserId: response.data.currentUserId } });
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        }
-
-        getTweets();
-    }, [dispatch]);
 
     return (
         <>

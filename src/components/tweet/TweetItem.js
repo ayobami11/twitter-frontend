@@ -22,7 +22,12 @@ import { setRgbaValue } from '../../utils/setRgbaValue';
 
 const Li = styled.li`
     border-bottom: 1px solid ${({ theme }) => theme.colors['#2f3336']};
+    cursor: pointer;
     padding: 1em 5%;
+
+    :hover {
+        background: hsl(0, 0%, 5%);
+    }
 `;
 
 const Figure = styled.figure`
@@ -31,37 +36,9 @@ const Figure = styled.figure`
 `;
 
 const Figcaption = styled.figcaption`
-    /* flex-basis: 100%; */
-    
     /* necessary to ensure text ellipsis works */
     overflow: hidden;
     width: 100%;
-`;
-
-const Images = styled.div`
-    --grid-gap: .5em;
-    --grid-column-count: 2;
-    --grid-item-min-width: 150px;
-
-    --gap-count: calc(var(--grid-column-count) - 1);
-    --total-gap-width: calc(var(--gap-count) * var(--grid-gap));
-    --grid-gap-max-width: calc((100% - var(--total-gap-width)) / var(--grid-column-count));
-
-    border-radius: .75em;
-    margin: 1.5em auto;
-    max-width: 550px;
-    overflow: hidden;
-
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(max(var(--grid-item-min-width), var(--grid-gap-max-width)), 1fr));
-    gap: .5em;
-`;
-
-const Img = styled.img`
-    background: grey;
-    min-height: 100%;
-
-    aspect-ratio: 1 / 1;
 `;
 
 const UserInfo = styled.div`
@@ -106,6 +83,7 @@ const VerifiedIconSC = styled(VerifiedIcon)`
 
 const Handle = styled.p`
     color: ${({ theme }) => theme.colors['#71767b']};
+    margin-top: .25em;
 
     overflow: hidden;
     text-overflow: ellipsis;
@@ -125,6 +103,33 @@ const Bio = styled.p`
         overflow: hidden;
         white-space: nowrap;
     }
+`;
+
+const Images = styled.div`
+    --grid-gap: .5em;
+    --grid-column-count: 2;
+    --grid-item-min-width: 150px;
+
+    --gap-count: calc(var(--grid-column-count) - 1);
+    --total-gap-width: calc(var(--gap-count) * var(--grid-gap));
+    --grid-gap-max-width: calc((100% - var(--total-gap-width)) / var(--grid-column-count));
+
+    border-radius: .75em;
+    margin: 1.5em auto;
+    max-width: 550px;
+    overflow: hidden;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(max(var(--grid-item-min-width), var(--grid-gap-max-width)), 1fr));
+    gap: .5em;
+`;
+
+const Img = styled.img`
+    background: grey;
+    background-size: cover;
+    min-height: 100%;
+
+    aspect-ratio: 1 / 1;
 `;
 
 const Button = styled.button`
@@ -217,7 +222,7 @@ const Menu = styled.menu`
     justify-content: space-between;
 
     margin-top: 0.75em;
-    max-width: 400px;
+    max-width: 500px;
 
     color: ${({ theme }) => theme.colors['#71767b']};
 `;
@@ -291,7 +296,8 @@ const TweetItem = ({ tweet, index }) => {
             <article>
                 <Figure>
                     <Avatar
-                        sx={{ width: 50, height: 50 }}
+                        sx={{ width: 50, height: 50, background: 'hsl(0, 3%, 42%)' }}
+                        imgProps={{ loading: 'lazy' }}
                         src={tweet.avatarUrl}
                         alt={`${tweet.handle} profile picture`}
                     />
@@ -307,6 +313,7 @@ const TweetItem = ({ tweet, index }) => {
                             </Author>
                             <Time>&middot;<span>{formatTimeElapsed(tweet.createdAt)}</span></Time>
                         </UserInfo>
+
                         {tweet.message && (
                             <Bio>
                                 <Linkify componentDecorator={(decoratedHref, decoratedText, key) =>
@@ -320,7 +327,7 @@ const TweetItem = ({ tweet, index }) => {
 
                         {tweet.images.length && (
                             <Images>
-                                {Children.toArray(tweet.images.map(imageUrl => <Img src={imageUrl} alt={`Tweet posted by @${tweet.handle}`} loading='lazy' />))}
+                                {Children.toArray(tweet.images.map(imageUrl => <Img src={imageUrl} alt='' loading='lazy' />))}
                                 {/* <Img src={Image} alt='' /> */}
                                 {/* <Img src={Image} alt='' />
                                 <Img src={Image} alt='' />

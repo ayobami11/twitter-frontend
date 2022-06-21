@@ -268,7 +268,7 @@ const UserProfile = () => {
                     <Main>
                         <ProfileDetails>
                             <Figure>
-                                <Avatar sx={{ width: 70, height: 70 }}
+                                <Avatar sx={{ width: 70, height: 70, background: 'hsl(0, 3%, 42%)' }}
                                     src={state.profile?.avatarUrl}
                                     alt={`${state.profile?.handle} profile picture`} />
 

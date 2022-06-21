@@ -1,4 +1,5 @@
 export const initialState = {
+    loading: true,
     currentUserId: '',
     tweets: [],
     alert: {
@@ -9,6 +10,14 @@ export const initialState = {
 
 export const reducer = (state, action) => {
     switch (action.type) {
+        case 'SET_LOADING_FALSE': {
+
+            return {
+                ...state,
+                loading: false
+            }
+        }
+
         case 'SET_TWEETS': {
 
             return {
