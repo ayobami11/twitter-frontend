@@ -25,7 +25,7 @@ library.add(fas, faComment, faHeart);
 const ResetStyles = createGlobalStyle`
   * {
     box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Open Sans', sans-serif;
     margin: 0;
     padding: 0;
   }

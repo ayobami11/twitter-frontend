@@ -8,7 +8,7 @@ import { AppContext } from '../contexts/app';
 import { ProfileContext } from '../contexts/profile';
 
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
+import AddIcon from '@mui/icons-material/Add';
 
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
@@ -20,6 +20,16 @@ import Sidebar from './general/Sidebar';
 import TweetList from './tweet/TweetList';
 
 import axios from '../axios';
+
+const AddIconSC = styled(AddIcon)`
+    background: ${({ theme }) => theme.colors.blue};
+    border-radius: 50%;
+    color: ${({ theme }) => theme.colors.white};
+
+    font-size: 3rem;
+    padding: .1em;
+
+`;
 
 const HomeContainer = styled.div`    
     max-width: 800px;
@@ -34,7 +44,7 @@ const HomeContainer = styled.div`
 
 const Header = styled.header`
     border-radius: .5em .5em 0 0;
-    padding: 1em 5%;
+    padding: calc(.5em + .5vw) 5%;
 
     display: flex;
     justify-content: space-between;
@@ -61,22 +71,14 @@ const Main = styled.main`
 const TweetLink = styled(Link)`
     display: block;
     border-radius: 50%;
-    /* border: 1px solid red; */
     
     position: fixed;
     z-index: 5;
     
     bottom: 20px;
     right: 20px;
-    `;
+`;
 
-const AddCircleRoundedIconSC = styled(AddCircleRoundedIcon)`
-    border-radius: 50%;
-    font-size: 3rem;
-    
-    background: white;
-    color: ${({ theme }) => theme.colors.blue};
-    `;
 
 const H1 = styled.h1``;
 
@@ -144,37 +146,38 @@ const Home = () => {
     return (
         <>
             {
-                loading ? <CircularProgressWithIcon /> : profile ? (
-                    <HomeContainer>
-                        <Sidebar isSidebarOpen={isSidebarOpen} closeSidebar={closeSidebar} />
+                loading ? <CircularProgressWithIcon /> :
+                    profile ? (
+                        <HomeContainer>
+                            <Sidebar isSidebarOpen={isSidebarOpen} closeSidebar={closeSidebar} />
 
-                        <Header>
-                            <Div>
-                                <IconButton onClick={openSidebar}>
+                            <Header>
+                                <Div>
+                                    <IconButton onClick={openSidebar}>
 
-                                    <Avatar
-                                        sx={{ width: 50, height: 50 }}
-                                        src={profile?.avatarUrl ?? ''}
-                                        alt={`${profile?.handle ?? ''} profile picture`}
-                                    />
-                                </IconButton>
-                                <H1>Home</H1>
-                            </Div>
-                            <AutoAwesomeIcon />
-                        </Header >
-                        <Main>
-                            <TweetList />
-                            <TweetLink to='../tweet'>
-                                <AddCircleRoundedIconSC />
-                            </TweetLink>
-                        </Main>
-                    </HomeContainer>
-                ) : (
-                    <ErrorContainer>
-                        <p>Something went wrong, but don't fret - it's not your fault.</p>
-                        <Button onClick={handleRefresh}>Refresh</Button>
-                    </ErrorContainer>
-                )}
+                                        <Avatar
+                                            sx={{ width: 50, height: 50 }}
+                                            src={profile?.avatarUrl ?? ''}
+                                            alt={`${profile?.handle ?? ''} profile picture`}
+                                        />
+                                    </IconButton>
+                                    <H1>Home</H1>
+                                </Div>
+                                <AutoAwesomeIcon />
+                            </Header >
+                            <Main>
+                                <TweetList />
+                                <TweetLink to='/tweet'>
+                                    <AddIconSC />
+                                </TweetLink>
+                            </Main>
+                        </HomeContainer>
+                    ) : (
+                        <ErrorContainer>
+                            <p>Something went wrong, but don't fret - it's not your fault.</p>
+                            <Button onClick={handleRefresh}>Refresh</Button>
+                        </ErrorContainer>
+                    )}
         </>
     );
 };

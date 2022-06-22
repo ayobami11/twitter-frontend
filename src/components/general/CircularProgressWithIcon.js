@@ -27,7 +27,7 @@ export const CircularProgressWithIcon = () => {
     return (
         <BoxSC>
             <CircularProgressSC size={100} />
-            <Box position='absolute' padding='5em'>
+            <Box position='absolute'>
                 <TwitterIconSC />
             </Box>
         </BoxSC>

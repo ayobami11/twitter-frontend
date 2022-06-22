@@ -1,4 +1,4 @@
-import { useEffect, useContext, Children } from 'react';
+import { useState, useEffect, useContext, Children } from 'react';
 
 import { Link, useParams } from 'react-router-dom';
 
@@ -13,6 +13,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Avatar from '@mui/material/Avatar';
 import VerifiedIcon from '@mui/icons-material/Verified';
+
+import { CircularProgressWithIcon } from '../general/CircularProgressWithIcon';
 
 import CommentForm from '../comment/CommentForm';
 import CommentList from '../comment/CommentList';
@@ -267,6 +269,8 @@ const TweetDetails = () => {
 
     const { tweetId } = useParams();
 
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
         const getTweetDetails = async () => {
             try {
@@ -280,6 +284,8 @@ const TweetDetails = () => {
                 }
             } catch (error) {
                 console.log(error);
+            } finally {
+                setLoading(false);
             }
         }
 
@@ -346,7 +352,7 @@ const TweetDetails = () => {
                 <H2>Tweet</H2>
             </Header>
             {
-                tweet ? (
+                loading ? <CircularProgressWithIcon /> : tweet ? (
                     <Tweet>
                         <Article>
                             <ArticleHeader>
@@ -437,7 +443,7 @@ const TweetDetails = () => {
                     </Tweet>
                 )
                     :
-                    <p>Tweet</p>
+                    <p>No tweet found.</p>
             }
 
         </>

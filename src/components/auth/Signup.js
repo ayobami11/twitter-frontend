@@ -19,6 +19,12 @@ import Twitter from '@mui/icons-material/Twitter';
 
 import { Button } from '../general/Button';
 
+const SignupPage = styled.div`
+    * {
+        font-family: 'Inter', sans-serif;
+    }
+`;
+
 const Header = styled.header`
     margin: 1em 0;
     text-align: center;
@@ -200,7 +206,7 @@ const Signup = () => {
     };
 
     return (
-        <>
+        <SignupPage>
             <Header>
                 <TwitterLogo fontSize='large' />
             </Header>
@@ -302,7 +308,7 @@ const Signup = () => {
                     <P>Have an account already? <LoginLink to='../login'>Log in</LoginLink></P>
                 </Section>
             </main>
-        </>
+        </SignupPage>
     );
 };
 

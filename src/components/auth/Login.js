@@ -18,6 +18,12 @@ import Twitter from '@mui/icons-material/Twitter';
 import { Button } from '../general/Button';
 import { AppContext } from '../../contexts/app';
 
+const LoginPage = styled.div`
+    * {
+        font-family: 'Inter', sans-serif;
+    }
+`;
+
 const Header = styled.header`
     margin: 1em 0;
     text-align: center;
@@ -47,7 +53,6 @@ const TextFieldSC = styled(TextField)`
     
     .MuiInputLabel-root {
         color: ${({ theme }) => theme.colors['#71767b']};
-
     }
 
     .MuiInputLabel-root.Mui-focused {
@@ -120,7 +125,7 @@ const attachTokenToRequest = (token = null) => {
 
 const Login = () => {
     const { dispatch: appDispatch } = useContext(AppContext);
-    
+
     const [state, dispatch] = useReducer(reducer, initialState);
 
     const [checkValidity, setCheckValidity] = useState(false);
@@ -200,7 +205,7 @@ const Login = () => {
     };
 
     return (
-        <>
+        <LoginPage>
             <Header>
                 <TwitterLogo fontSize='large' />
             </Header>
@@ -268,7 +273,7 @@ const Login = () => {
                     <P>Don't have an account? <SignupLink to='../signup'>Sign up</SignupLink></P>
                 </Section>
             </main>
-        </>
+        </LoginPage>
     );
 };
 

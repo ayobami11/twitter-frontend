@@ -15,7 +15,7 @@ import styled from 'styled-components';
 import IconButton from '@mui/material/IconButton';
 import Avatar from '@mui/material/Avatar';
 
-import CalendarViewMonthIcon from '@mui/icons-material/CalendarToday';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import VerifiedIcon from '@mui/icons-material/Verified';
 
@@ -295,7 +295,7 @@ const UserProfile = () => {
                                 </Linkify>
                             </Bio>
 
-                            <JoinDate><CalendarViewMonthIcon /> Joined {formatTweetDate(state.profile?.createdAt, true)}</JoinDate>
+                            <JoinDate><CalendarTodayIcon /> Joined {formatTweetDate(state.profile?.createdAt, true)}</JoinDate>
 
                             <FollowDetails>
                                 <div><Link to='following'><span>{following?.length}</span> Following</Link></div>
