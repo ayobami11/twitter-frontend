@@ -101,7 +101,7 @@ const CommentItem = ({ message, handle, name, avatarUrl, verified, createdAt }) 
             <article>
                 <Figure>
                     <Avatar
-                        sx={{ width: 50, height: 50 }}
+                        sx={{ width: 50, height: 50, background: 'hsl(0, 3%, 42%)' }}
                         imgProps={{ loading: 'lazy' }}
                         src={avatarUrl}
                         alt={`${handle} profile picture`}

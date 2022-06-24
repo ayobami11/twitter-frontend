@@ -170,7 +170,7 @@ const Sidebar = ({ isSidebarOpen, closeSidebar }) => {
                 <figure>
                     <Link to={`/${profile?.handle}`}>
                         <Avatar
-                            sx={{ width: 55, height: 55 }}
+                            sx={{ width: 55, height: 55, background: 'hsl(0, 3%, 42%)' }}
                             src={profile?.avatarUrl ?? ''}
                             alt={`${profile?.handle ?? ''} profile picture`}
                         />

@@ -7,7 +7,6 @@ import styled from 'styled-components';
 import { AppContext } from '../contexts/app';
 import { ProfileContext } from '../contexts/profile';
 
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import AddIcon from '@mui/icons-material/Add';
 
 import Avatar from '@mui/material/Avatar';
@@ -47,8 +46,8 @@ const Header = styled.header`
     padding: calc(.5em + .5vw) 5%;
 
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 1.5em;
 
     position: sticky;
     top: 0;
@@ -56,12 +55,6 @@ const Header = styled.header`
 
     background: ${({ theme }) => theme.colors.black};
     border-bottom: 1px solid ${({ theme }) => theme.colors['#2f3336']};
-`;
-
-const Div = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 1em;
 `;
 
 const Main = styled.main`
@@ -97,7 +90,6 @@ const ErrorContainer = styled.div`
 `;
 
 const handleRefresh = () => window.location.reload();
-
 
 const Home = () => {
     const { state: { profile }, dispatch } = useContext(ProfileContext);
@@ -152,18 +144,17 @@ const Home = () => {
                             <Sidebar isSidebarOpen={isSidebarOpen} closeSidebar={closeSidebar} />
 
                             <Header>
-                                <Div>
-                                    <IconButton onClick={openSidebar}>
+                                {/* <Div> */}
+                                <IconButton onClick={openSidebar}>
 
-                                        <Avatar
-                                            sx={{ width: 50, height: 50 }}
-                                            src={profile?.avatarUrl ?? ''}
-                                            alt={`${profile?.handle ?? ''} profile picture`}
-                                        />
-                                    </IconButton>
-                                    <H1>Home</H1>
-                                </Div>
-                                <AutoAwesomeIcon />
+                                    <Avatar
+                                        sx={{ width: 50, height: 50, background: 'hsl(0, 3%, 42%)' }}
+                                        src={profile?.avatarUrl ?? ''}
+                                        alt={`${profile?.handle ?? ''} profile picture`}
+                                    />
+                                </IconButton>
+                                <H1>Home</H1>
+                                {/* </Div> */}
                             </Header >
                             <Main>
                                 <TweetList />

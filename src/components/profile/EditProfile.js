@@ -260,7 +260,7 @@ const EditProfile = () => {
                             <ImageContainer>
 
                                 <AvatarSC
-                                    sx={{ width: 100, height: 100 }}
+                                    sx={{ width: 100, height: 100, background: 'hsl(0, 3%, 42%)' }}
                                     src={imageUrl || state.profile?.avatarUrl}
                                     alt={`${state.profile?.handle} profile picture`}
                                 />

@@ -310,22 +310,21 @@ const TweetItem = ({ tweet, index }) => {
                             <Time>&middot;<span>{formatTimeElapsed(tweet.createdAt)}</span></Time>
                         </UserInfo>
 
-                        {tweet.message && (
-                            <Bio>
-                                <Linkify componentDecorator={(decoratedHref, decoratedText, key) =>
-                                    <a href={decoratedHref} target='_blank' key={key} rel="noreferrer">{decoratedText}</a>
-                                }>
-                                    {tweet.message}
-                                </Linkify>
-                            </Bio>
-                        )
-                        }
 
-                        {tweet.images.length && (
-                            <Images>
-                                {Children.toArray(tweet.images.map(imageUrl => <Img src={imageUrl} alt='' loading='lazy' />))}
-                            </Images>
-                        )}
+                        <Bio>
+                            <Linkify componentDecorator={(decoratedHref, decoratedText, key) =>
+                                <a href={decoratedHref} target='_blank' key={key} rel="noreferrer">{decoratedText}</a>
+                            }>
+                                {tweet.message}
+                            </Linkify>
+                        </Bio>
+
+                        {
+                            tweet.images.length ?
+                                <Images>
+                                    {Children.toArray(tweet.images.map(imageUrl => <Img src={imageUrl} alt='' loading='lazy' />))}
+                                </Images> : null
+                        }
 
                         <Menu>
                             <li>

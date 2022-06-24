@@ -381,11 +381,15 @@ const TweetDetails = () => {
                                     {tweet.message}
                                 </Linkify>
                             </Bio>
-                            {tweet.images.length && (
-                                <Images>
-                                    {Children.toArray(tweet.images.map(imageUrl => <Img src={imageUrl} alt={`Tweet posted by @${tweet.handle}`} loading='lazy' />))}
-                                </Images>
-                            )}
+
+                            {
+                                tweet.images.length ? (
+                                    <Images>
+                                        {Children.toArray(tweet.images.map(imageUrl => <Img src={imageUrl} alt={`Tweet posted by @${tweet.handle}`} loading='lazy' />))}
+                                    </Images>
+                                ) : null
+                            }
+
                             <Time>
                                 <span>{formatTweetTime(tweet.createdAt)}</span>&middot;
                                 <span>{formatTweetDate(tweet.createdAt)}</span>

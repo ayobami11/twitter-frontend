@@ -106,8 +106,8 @@ const Users = () => {
                             {Children.toArray(state.users.map((user, index) => <UserItem {...user} currentUserId={state.currentUserId} index={index} />))}
                         </ul> :
                         <>
-                            <H2>Your nest is empty</H2>
-                            <P>But it won't be for long! People following you will show up here.</P>
+                            <H2>Nest is empty</H2>
+                            <P>But it won't be for long! Users of Tweetteer will show up here.</P>
                         </>
                 }
             </Main>

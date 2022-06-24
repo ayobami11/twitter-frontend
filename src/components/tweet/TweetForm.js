@@ -201,7 +201,7 @@ const TweetForm = () => {
         <FormContainer>
 
           <Avatar
-            sx={{ width: 50, height: 50 }}
+            sx={{ width: 50, height: 50, background: 'hsl(0, 3%, 42%)' }}
             src={user?.avatarUrl}
             alt={`${user?.handle} profile picture`}
           />

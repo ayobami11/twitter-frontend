@@ -153,7 +153,7 @@ const FollowingItem = ({ name, handle, avatarUrl, bio, verified, followers, curr
             <article>
                 <Figure>
                     <Avatar
-                        sx={{ width: 50, height: 50 }}
+                        sx={{ width: 50, height: 50, background: 'hsl(0, 3%, 42%)' }}
                         imgProps={{ loading: 'lazy' }}
                         src={avatarUrl}
                         alt={`${handle} profile picture`} />
@@ -173,7 +173,7 @@ const FollowingItem = ({ name, handle, avatarUrl, bio, verified, followers, curr
                             }
                         </UserInfo>
                         
-                        {bio && <Bio>{bio}</Bio>}
+                        <Bio>{bio}</Bio>
                     </Figcaption>
                 </Figure>
             </article>
