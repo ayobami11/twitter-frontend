@@ -53,7 +53,7 @@ const Main = styled.main`
 const ProfileDetails = styled.section`
     margin: 1.5em auto .5em;
     width: 90%;
-`;
+    `;
 
 const Figure = styled.figure`
 
@@ -133,7 +133,7 @@ const ButtonSC = styled(Button)`
     border-radius: 1.25em;
     font-weight: ${({ theme }) => theme.font.weights.bold};
 
-    align-self: center;
+    white-space: nowrap;
 `;
 
 const FollowButton = styled(Button)`
