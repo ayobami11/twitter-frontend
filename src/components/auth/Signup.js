@@ -97,7 +97,11 @@ const TextFieldSC = styled(TextField)`
     .MuiInputLabel-asterisk {
         color: hsl(0, 85%, 60%);
     }
-    `;
+`;
+
+const AtIcon = styled.span`
+    color: ${({ theme }) => theme.colors['#71767b']};
+`;
 
 const VisibilitySC = styled(Visibility)`
     color: ${({ theme }) => theme.colors.white};
@@ -182,7 +186,7 @@ const Signup = () => {
                 if (response?.data.success) {
                     appDispatch({ type: 'SET_ALERT', payload: { message: 'Signup successful.' } });
 
-                    setTimeout(() => navigate('../login'), 2500);
+                    setTimeout(() => navigate('/login'), 2500);
                 }
             } catch (error) {
                 console.log(error);
@@ -242,6 +246,9 @@ const Signup = () => {
                             placeholder='johndoe'
                             inputProps={{ className: 'form-input', maxLength: 20 }}
                             onChange={handleInputChange}
+                            InputProps={{
+                                startAdornment: <InputAdornment position='start'><AtIcon>@</AtIcon></InputAdornment>
+                            }}
                             variant='filled'
                             label='Handle'
                             fullWidth
@@ -305,7 +312,7 @@ const Signup = () => {
 
                         <ButtonSC type='submit'>Sign up</ButtonSC>
                     </form>
-                    <P>Have an account already? <LoginLink to='../login'>Log in</LoginLink></P>
+                    <P>Have an account already? <LoginLink to='/login'>Log in</LoginLink></P>
                 </Section>
             </main>
         </SignupPage>

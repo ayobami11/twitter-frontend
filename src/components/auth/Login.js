@@ -183,7 +183,7 @@ const Login = () => {
                 if (response?.data.success) {
                     attachTokenToRequest(response.data.user.accessToken);
 
-                    navigate('../home');
+                    navigate('/home');
 
 
                 }

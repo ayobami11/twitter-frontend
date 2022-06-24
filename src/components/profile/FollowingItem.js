@@ -8,12 +8,20 @@ import { ProfileContext } from '../../contexts/profile';
 
 import Avatar from '@mui/material/Avatar';
 
+import VerifiedIcon from '@mui/icons-material/Verified';
+
 import { Button } from '../general/Button';
 
 import axios from '../../axios';
 
 const Li = styled.li`
-    margin: 1em 0;
+    border-bottom: 1px solid ${({ theme }) => theme.colors['#2f3336']};
+    cursor: pointer;
+    padding: 1em 5%;
+
+    :hover {
+        background: hsl(0, 0%, 5%);
+    }
 `;
 
 const Figure = styled.figure`
@@ -22,35 +30,59 @@ const Figure = styled.figure`
 `;
 
 const Figcaption = styled.figcaption`
+    flex: 100%;
+
     display: flex;
     flex-direction: column;
 
     line-height: 1.3;
+    overflow: hidden;
+`;
+
+const UserInfo = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+`;
+
+const Author = styled.div`
+    /* ensures text ellipsis works properly */
+    overflow: hidden;
     width: 100%;
 
-    > div {
-        display: flex;
-        gap: 1em;
-        justify-content: space-between;
+`;
 
-        margin: .25em 0;
-        
-        button {
-            align-self: center;
-        }
+const Name = styled.p`
+    color: ${({ theme }) => theme.colors['#e7e9ea']};
+    font-weight: ${({ theme }) => theme.font.weights.bold};
+
+    display: flex;
+    align-items: center;
+    gap: .25em;
+    /* prevents flex parent from growing bigger than necessary */
+    max-width: fit-content;
+    
+    span {
+        flex: 1;
+
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 `;
 
-const Name = styled.span`
-    color: ${({ theme }) => theme.colors['#e7e9ea']};
-    font-weight: ${({ theme }) => theme.font.weights.bold};
-    display: block;
+const VerifiedIconSC = styled(VerifiedIcon)`
+    font-size: 1rem;
 `;
 
-
-const Handle = styled.span`
+const Handle = styled.p`
     color: ${({ theme }) => theme.colors['#71767b']};
-    display: block;
+    margin-top: .25em;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 `;
 
 const Bio = styled.p`
@@ -58,6 +90,8 @@ const Bio = styled.p`
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+
+    margin-top: .75em;
 `;
 
 const UnfollowButton = styled(Button)`
@@ -73,7 +107,7 @@ const FollowButton = styled(Button)`
     color: rgb(15, 20, 25);
 `;
 
-const FollowingItem = ({ name, handle, avatarUrl, bio = 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maiores placeat itaque ipsam officia quidem praesentium fugit accusamus odio quaerat fuga, consequatur molestias ullam expedita commodi laudantium quasi dolorum voluptatum necessitatibus!', followers, currentUserId, index }) => {
+const FollowingItem = ({ name, handle, avatarUrl, bio, verified, followers, currentUserId, index }) => {
 
     const { dispatch } = useContext(ProfileContext);
 
@@ -81,11 +115,10 @@ const FollowingItem = ({ name, handle, avatarUrl, bio = 'Lorem ipsum dolor sit a
 
     const navigateToProfile = (event) => {
         if (event.target.nodeName !== 'BUTTON') {
-            navigate(`../${handle}`);
+            navigate(`/${handle}`);
         }
 
     }
-
 
     const followUser = async () => {
         try {
@@ -119,23 +152,28 @@ const FollowingItem = ({ name, handle, avatarUrl, bio = 'Lorem ipsum dolor sit a
         <Li onClick={navigateToProfile}>
             <article>
                 <Figure>
-                    <Avatar sx={{ width: 50, height: 50 }}
+                    <Avatar
+                        sx={{ width: 50, height: 50 }}
+                        imgProps={{ loading: 'lazy' }}
                         src={avatarUrl}
                         alt={`${handle} profile picture`} />
                     <Figcaption>
-                        <div>
-                            <div>
-                                <Name>{name}</Name>
+                        <UserInfo>
+                            <Author>
+                                <Name>
+                                    <span>{name}</span>
+                                    {verified && <VerifiedIconSC />}
+                                </Name>
                                 <Handle>@{handle}</Handle>
-                            </div>
+                            </Author>
 
                             {followers.includes(currentUserId) ?
                                 <UnfollowButton onClick={unfollowUser}>Following</UnfollowButton> :
                                 <FollowButton onClick={followUser}>Follow</FollowButton>
                             }
-                        </div>
-                        <Bio>{bio}</Bio>
-
+                        </UserInfo>
+                        
+                        {bio && <Bio>{bio}</Bio>}
                     </Figcaption>
                 </Figure>
             </article>

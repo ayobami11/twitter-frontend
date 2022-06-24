@@ -9,7 +9,7 @@ import styled from 'styled-components';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 
-// import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -18,13 +18,22 @@ import { Button } from '../general/Button';
 import axios from '../../axios';
 import ImagePreview from '../ImagePreview';
 
-// import { setRgbaValue } from '../../utils/setRgbaValue';
+const PageContainer = styled.div`
+  border: 1px solid ${({ theme }) => theme.colors['#2f3336']};
+  
+  line-height: 1.5;
+  max-width: 1000px;
+  margin: 1.5em auto;
+  width: 90%;
+  `;
 
 const Header = styled.header`
   display: flex;
   justify-content: space-between;
-  width: 90%;
-  margin: 1em auto;
+  align-items: center;
+  
+  border-bottom: 1px solid ${({ theme }) => theme.colors['#2f3336']};
+  padding: 1em;
 `;
 
 const Main = styled.main`
@@ -36,18 +45,26 @@ const FormContainer = styled.div`
   display: flex;
   gap: 1em;
 
-`;
+  margin: 1em 0;
+  
+  `;
 
 const CloseIconSC = styled(CloseIcon)`
   color: ${({ theme }) => theme.colors.white};
-  `
+`;
+
+const Form = styled.form`
+    width: 100%;
+`;
 
 const Textarea = styled.textarea`
   background: ${({ theme }) => theme.colors.black};
   color: ${({ theme }) => theme.colors.white};
   border: none;
-  height: 50vh;
+  font-size: 1rem;
+  height: min(50vh, 300px);
   outline: none;
+  padding: 1em; 
   resize: none;
   width: 100%;
 `;
@@ -59,45 +76,27 @@ const Input = styled.input`
   position: absolute;
 `;
 
-const Form = styled.form`
-  width: 100%;
+
+const ImageCountText = styled.p`
+  display: flex;
+  align-items: center;
+  gap: .5em;
+
+  color: lavenderblush;
+  font-size: .8rem;
+  margin: 1em 0;
 `;
-
-const RemoveButton = styled(Button)`
-    display: ${({ $images }) => $images ? 'block' : 'none'};
-`;
-
-// const CameraAltOutlinedIconSC = styled(CameraAltOutlinedIcon)`
-// color: ${({ theme }) => theme.colors.blue};
-
-//   :hover {
-//     /* background: ${({ theme }) => setRgbaValue(theme.colors.blue, 0.09)}; */
-//   }
-
-// `;
-
-// const Label = styled.label`
-//     border: none;
-
-//     cursor: pointer;
-
-//      :hover {
-//         svg {
-//             background: ${({ theme }) => setRgbaValue(theme.colors.blue, 0.09)};
-//         }
-
-//         path,
-//         span {
-//             color: ${({ theme }) => theme.colors.blue};
-//         }
-//     }
-// `;
 
 const Menu = styled.menu`
   display: flex;
   flex-wrap: wrap;
   gap: 1em;
   align-items: center;
+`;
+
+const ButtonSC = styled(Button)`
+  font-size: .8rem;
+  padding: .75em 1.5em;
 `;
 
 const TweetForm = () => {
@@ -114,7 +113,7 @@ const TweetForm = () => {
   const navigate = useNavigate();
 
   const navigateToTweets = () => {
-    navigate('../home');
+    navigate('/home');
   }
 
   const handleFileChange = (event) => {
@@ -130,6 +129,8 @@ const TweetForm = () => {
     if (!areFilesValid) {
       setFileValidation('Invalid file type(s).');
       return;
+    } else {
+      setFileValidation('');
     }
 
 
@@ -187,7 +188,7 @@ const TweetForm = () => {
   }
 
   return (
-    <>
+    <PageContainer>
       <Header>
         <IconButton onClick={navigateToTweets}>
 
@@ -215,23 +216,24 @@ const TweetForm = () => {
             />
 
             <Input ref={inputRef} type="file" name="image" id="image" multiple accept='image/*' onChange={handleFileChange} />
-            <p><small>You can upload a maximum of 4 images.</small></p>
-
-            <Menu>
-              <li>
-                <Button as='label' htmlFor="image">{imageUrls.length ? 'Change' : 'Add'} images</Button>
-              </li>
-
-              <li>
-                <RemoveButton $images={imageUrls.length} onClick={removeImages}>Remove images</RemoveButton>
-              </li>
-            </Menu>
 
           </Form>
         </FormContainer>
+        <Menu>
+          <li>
+            <ButtonSC as='label' htmlFor="image">{imageUrls.length ? 'Change' : 'Add'} images</ButtonSC>
+          </li>
+
+          {images.length ? (
+            <li>
+              <ButtonSC onClick={removeImages}>Remove images</ButtonSC>
+            </li>
+          ) : null}
+        </Menu>
+        <ImageCountText><InfoOutlinedIcon /><strong>You can upload a maximum of 4 images (allowed types: .jpg, .png)</strong></ImageCountText>
         {!fileValidation && imageUrls.length ? <ImagePreview imageUrls={imageUrls} /> : <p>{fileValidation}</p>}
       </Main>
-    </>
+    </PageContainer>
   )
 }
 

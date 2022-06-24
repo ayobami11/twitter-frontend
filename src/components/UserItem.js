@@ -4,15 +4,15 @@ import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-import { ProfileContext } from '../../contexts/profile';
+import { AppContext } from '../contexts/app';
 
 import Avatar from '@mui/material/Avatar';
 
 import VerifiedIcon from '@mui/icons-material/Verified';
 
-import { Button } from '../general/Button';
+import { Button } from './general/Button';
 
-import axios from '../../axios';
+import axios from '../axios';
 
 const Li = styled.li`
     border-bottom: 1px solid ${({ theme }) => theme.colors['#2f3336']};
@@ -107,9 +107,9 @@ const FollowButton = styled(Button)`
     color: rgb(15, 20, 25);
 `;
 
-const FollowerItem = ({ name, handle, avatarUrl, bio, verified, followers, currentUserId, index }) => {
+const UserItem = ({ name, handle, avatarUrl, bio, verified, followers, currentUserId, index }) => {
 
-    const { dispatch } = useContext(ProfileContext);
+    const { dispatch } = useContext(AppContext);
 
     const navigate = useNavigate();
 
@@ -117,7 +117,6 @@ const FollowerItem = ({ name, handle, avatarUrl, bio, verified, followers, curre
         if (event.target.nodeName !== 'BUTTON') {
             navigate(`/${handle}`);
         }
-
     }
 
     const followUser = async () => {
@@ -126,7 +125,7 @@ const FollowerItem = ({ name, handle, avatarUrl, bio, verified, followers, curre
             const response = await axios.post(`/user/${handle}/follow`);
 
             if (response?.data.success) {
-                dispatch({ type: 'HANDLE_FOLLOWERS_LIST', payload: { followerId: response.data.followerId, index } });
+                dispatch({ type: 'HANDLE_FOLLOW', payload: { followerId: response.data.followerId, index } });
             }
         } catch (error) {
             console.log(error);
@@ -140,7 +139,7 @@ const FollowerItem = ({ name, handle, avatarUrl, bio, verified, followers, curre
             const response = await axios.post(`/user/${handle}/unfollow`);
 
             if (response?.data.success) {
-                dispatch({ type: 'HANDLE_UNFOLLOWERS_LIST', payload: { oldFollowerId: response.data.oldFollowerId, index } })
+                dispatch({ type: 'HANDLE_UNFOLLOW', payload: { oldFollowerId: response.data.oldFollowerId, index } })
             }
         } catch (error) {
             console.log(error);
@@ -159,7 +158,7 @@ const FollowerItem = ({ name, handle, avatarUrl, bio, verified, followers, curre
                         alt={`${handle} profile picture`} />
                     <Figcaption>
                         <UserInfo>
-                        <Author>
+                            <Author>
                                 <Name>
                                     <span>{name}</span>
                                     {verified && <VerifiedIconSC />}
@@ -172,8 +171,8 @@ const FollowerItem = ({ name, handle, avatarUrl, bio, verified, followers, curre
                                 <FollowButton onClick={followUser}>Follow</FollowButton>
                             }
                         </UserInfo>
-
                         {bio && <Bio>{bio}</Bio>}
+
                     </Figcaption>
                 </Figure>
             </article>
@@ -182,4 +181,4 @@ const FollowerItem = ({ name, handle, avatarUrl, bio, verified, followers, curre
     )
 }
 
-export default FollowerItem;
+export default UserItem;

@@ -9,12 +9,11 @@ import Avatar from '@mui/material/Avatar';
 
 import VerifiedIcon from '@mui/icons-material/Verified';
 import CloseIcon from '@mui/icons-material/Close';
-import PermIdentityIcon from '@mui/icons-material/PermIdentity';
+import PersonIcon from '@mui/icons-material/Person';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import LogoutIcon from '@mui/icons-material/Logout';
 
 import axios from '../../axios';
-
-// import { setRgbaValue } from '../../utils/setRgbaValue';
 
 import { ProfileContext } from '../../contexts/profile';
 
@@ -94,9 +93,8 @@ const Handle = styled.p`
 `;
 
 const CloseIconSC = styled(CloseIcon)`
-
     color: ${({ theme }) => theme.colors.white};
-    `;
+`;
 
 
 const FollowDetails = styled.div`
@@ -153,7 +151,7 @@ const Sidebar = ({ isSidebarOpen, closeSidebar }) => {
         const response = await axios.post('/user/logout');
 
         if (response?.data.success) {
-            navigate('../login');
+            navigate('/login');
         }
     }
 
@@ -170,7 +168,7 @@ const Sidebar = ({ isSidebarOpen, closeSidebar }) => {
             <ProfileInfo>
 
                 <figure>
-                    <Link to={`../${profile?.handle}`}>
+                    <Link to={`/${profile?.handle}`}>
                         <Avatar
                             sx={{ width: 55, height: 55 }}
                             src={profile?.avatarUrl ?? ''}
@@ -178,7 +176,7 @@ const Sidebar = ({ isSidebarOpen, closeSidebar }) => {
                         />
                     </Link>
                     <Figcaption>
-                        <Link to={`../${profile?.handle}`}>
+                        <Link to={`/${profile?.handle}`}>
                             <Name>
                                 <span>{profile?.name}</span>
 
@@ -191,16 +189,22 @@ const Sidebar = ({ isSidebarOpen, closeSidebar }) => {
 
 
                 <FollowDetails>
-                    <div><Link to={`../${profile?.handle}/following`}><span>{profile?.following.length}</span> Following</Link></div>
-                    <div><Link to={`../${profile?.handle}/followers`}><span>{profile?.followers.length}</span> Followers</Link></div>
+                    <div><Link to={`/${profile?.handle}/following`}><span>{profile?.following.length}</span> Following</Link></div>
+                    <div><Link to={`/${profile?.handle}/followers`}><span>{profile?.followers.length}</span> Followers</Link></div>
                 </FollowDetails>
             </ProfileInfo>
             <Nav>
                 <ul>
                     <Li>
-                        <Link to={`../${profile?.handle}`}>
-                            <PermIdentityIcon />
+                        <Link to={`/${profile?.handle}`}>
+                            <PersonIcon />
                             Profile
+                        </Link>
+                    </Li>
+                    <Li>
+                        <Link to='/users'>
+                            <PeopleAltIcon />
+                            Users
                         </Link>
                     </Li>
                     <Li>

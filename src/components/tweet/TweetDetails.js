@@ -46,7 +46,7 @@ const Tweet = styled.div`
     @media (min-width: 800px) {
         border: 1px solid ${({ theme }) => theme.colors['#2f3336']};
         border-radius: .5em;
-        margin: 1em auto;
+        margin: 2em auto;
     }
 `;
 
@@ -346,7 +346,7 @@ const TweetDetails = () => {
     return (
         <>
             <Header>
-                <Link to='../../../home'>
+                <Link to='/home'>
                     <ArrowBackIcon />
                 </Link>
                 <H2>Tweet</H2>
@@ -363,7 +363,7 @@ const TweetDetails = () => {
                                         alt=''
                                     />
                                     <Figcaption>
-                                        <Link to={`../${tweet.handle}`}>
+                                        <Link to={`/${tweet.handle}`}>
                                             <Name>
                                                 <span>{tweet.name}</span>
 
@@ -384,10 +384,6 @@ const TweetDetails = () => {
                             {tweet.images.length && (
                                 <Images>
                                     {Children.toArray(tweet.images.map(imageUrl => <Img src={imageUrl} alt={`Tweet posted by @${tweet.handle}`} loading='lazy' />))}
-                                    {/* <Img src={Image} alt='' /> */}
-                                    {/* <Img src={Image} alt='' />
-                                <Img src={Image} alt='' />
-                                <Img src={Image} alt='' /> */}
                                 </Images>
                             )}
                             <Time>

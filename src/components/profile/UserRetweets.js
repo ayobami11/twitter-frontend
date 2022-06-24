@@ -26,7 +26,7 @@ margin: .75em 0;
 
 const UserRetweets = () => {
   const {
-    state: { retweetedTweets }, dispatch
+    state: { retweetedTweets, currentUserHandle }, dispatch
   } = useContext(ProfileContext);
 
   const { handle } = useParams();
@@ -39,7 +39,6 @@ const UserRetweets = () => {
         if (response?.data.success) {
           dispatch({ type: 'SET_RETWEETED_TWEETS', payload: { retweetedTweets: response.data.retweetedTweets } });
 
-          dispatch({ type: 'SET_CURRENT_USER_ID', payload: { currentUserId: response.data.currentUserId } });
         }
       } catch (error) {
         console.log(error);
@@ -63,8 +62,13 @@ const UserRetweets = () => {
         </ul>
       ) : (
         <SectionNil>
-          <H2Nil>You don't have any retweets yet</H2Nil>
-          <PNil>Tap the retweet icon on any Tweet to show it some love. When you do, it'll show up here.</PNil>
+          {handle === currentUserHandle ?
+            <>
+              <H2Nil>You don't have any retweets yet</H2Nil>
+              <PNil>Tap the retweet icon on any Tweet to show it some love. When you do, it'll show up here.</PNil>
+            </> :
+            <H2Nil>@{handle} doesn't have any retweets yet</H2Nil>
+          }
         </SectionNil>
       )
     }

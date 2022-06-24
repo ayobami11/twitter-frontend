@@ -1,5 +1,6 @@
 export const initialState = {
     currentUserId: '',
+    currentUserHandle: '',
     profile: null,
     profileDetails: {
         name: '',
@@ -39,10 +40,11 @@ export const reducer = (state, action) => {
                 validationMessages: { ...state.validationMessages, ...action.payload }
             };
 
-        case 'SET_CURRENT_USER_ID': {
+        case 'SET_CURRENT_USER_DETAILS': {
             return {
                 ...state,
-                currentUserId: action.payload.currentUserId
+                currentUserId: action.payload.currentUserId,
+                currentUserHandle: action.payload.currentUserHandle
             }
         }
 
@@ -118,7 +120,7 @@ export const reducer = (state, action) => {
                     return follower;
                 }
 
-                return follower
+                return follower;
             });
 
             return {
@@ -135,7 +137,7 @@ export const reducer = (state, action) => {
                     return follower;
                 }
 
-                return follower
+                return follower;
             });
 
             return {

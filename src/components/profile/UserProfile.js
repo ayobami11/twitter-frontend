@@ -43,8 +43,10 @@ const H1 = styled.h1`
 `;
 
 const Main = styled.main`
+    border: 1px solid ${({ theme }) => theme.colors['#2f3336']};
+
     max-width: 1000px;
-    margin: 0 auto;
+    margin: 2em auto;
 
 `;
 
@@ -60,6 +62,7 @@ const Figure = styled.figure`
 const Figcaption = styled.figcaption`
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
     > div {
         margin-top: .75em;
@@ -144,7 +147,7 @@ const NavLinkSC = styled(NavLink)`
 `;
 
 const Nav = styled.nav`
-    border-bottom: 1px solid ${({ theme }) => theme.colors['#71767b']};
+    border-bottom: 1px solid ${({ theme }) => theme.colors['#2f3336']};
 `;
 
 const Ul = styled.ul`
@@ -201,7 +204,7 @@ const UserProfile = () => {
     const navigate = useNavigate();
 
     const navigateToHome = () => {
-        navigate('../');
+        navigate('/');
     }
 
 
@@ -242,6 +245,10 @@ const UserProfile = () => {
                 if (response?.data.success) {
                     dispatch({ type: 'SET_PROFILE', payload: { profile: response.data.user } })
 
+                    dispatch({
+                        type: 'SET_CURRENT_USER_DETAILS',
+                        payload: { currentUserId: response.data.currentUserId, currentUserHandle: response.data.currentUserHandle }
+                      });
                 }
             } catch (error) {
                 console.log(error)

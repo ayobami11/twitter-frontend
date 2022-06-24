@@ -13,6 +13,7 @@ import {
 import Home from './components/Home';
 import Login from './components/auth/Login';
 import Signup from './components/auth/Signup';
+import Users from './components/Users';
 import TweetForm from './components/tweet/TweetForm';
 import TweetDetails from './components/tweet/TweetDetails';
 import UserProfile from './components/profile/UserProfile';
@@ -35,6 +36,7 @@ ReactDOM.render(
 
                     <Route path='home' element={<Home />} />
                     <Route path='tweet' element={<TweetForm />} />
+                    <Route path='users' element={<Users />} />
 
                     <Route
                         path=':handle'

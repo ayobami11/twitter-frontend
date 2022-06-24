@@ -18,8 +18,6 @@ import axios from '../../axios';
 import { formatTimeElapsed } from '../../utils/formatTimeElapsed';
 import { setRgbaValue } from '../../utils/setRgbaValue';
 
-// import Image from '../../assets/images/image.jpg';
-
 const Li = styled.li`
     border-bottom: 1px solid ${({ theme }) => theme.colors['#2f3336']};
     cursor: pointer;
@@ -139,8 +137,6 @@ const Button = styled.button`
     cursor: pointer;
     position: relative;
     z-index: 3;
-    
-    /* pointer-events: none; */
 `;
 
 const Reaction = styled(Button)`
@@ -236,7 +232,7 @@ const TweetItem = ({ tweet, index }) => {
         // Navigates to the tweet details page only when a link in the tweet or reaction (like, retweet) is not clicked
         if (event.target.nodeName !== 'A' && !event.target.classList.contains('reaction')
             && ![...document.getElementsByClassName('reaction')].some(element => element.contains(event.target))) {
-            navigate(`../${tweet.handle}/status/${tweet._id}`);
+            navigate(`/${tweet.handle}/status/${tweet._id}`);
         }
     }
 
@@ -328,10 +324,6 @@ const TweetItem = ({ tweet, index }) => {
                         {tweet.images.length && (
                             <Images>
                                 {Children.toArray(tweet.images.map(imageUrl => <Img src={imageUrl} alt='' loading='lazy' />))}
-                                {/* <Img src={Image} alt='' /> */}
-                                {/* <Img src={Image} alt='' />
-                                <Img src={Image} alt='' />
-                                <Img src={Image} alt='' /> */}
                             </Images>
                         )}
 

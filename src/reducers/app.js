@@ -2,6 +2,7 @@ export const initialState = {
     loading: true,
     currentUserId: '',
     tweets: [],
+    users: [],
     alert: {
         open: false,
         message: ''
@@ -23,6 +24,14 @@ export const reducer = (state, action) => {
             return {
                 ...state,
                 tweets: action.payload.tweets
+            }
+        }
+
+        case 'SET_USERS': {
+
+            return {
+                ...state,
+                users: action.payload.users
             }
         }
 
@@ -107,6 +116,40 @@ export const reducer = (state, action) => {
                 tweets
             }
 
+        }
+
+        case 'HANDLE_FOLLOW': {
+            const users = state.users.map((user, index) => {
+                if (index === action.payload.index) {
+                    user.followers = [...user.followers, action.payload.followerId];
+
+                    return user;
+                }
+
+                return user;
+            });
+
+            return {
+                ...state,
+                users
+            }
+        }
+
+        case 'HANDLE_UNFOLLOW': {
+            const users = state.users.filter((user, index) => {
+                if (index === action.payload.index) {
+                    user.followers = user.followers.filter(userId => userId !== action.payload.oldFollowerId);
+
+                    return user;
+                }
+
+                return user;
+            })
+
+            return {
+                ...state,
+                users
+            }
         }
 
         case 'SET_ALERT': {

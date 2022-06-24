@@ -2,17 +2,17 @@ import { useEffect, useContext, Children } from 'react';
 
 import styled from 'styled-components';
 
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import IconButton from '@mui/material/IconButton';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-import { ProfileContext } from '../../contexts/profile';
+import { AppContext } from '../contexts/app';
 
-import FollowerItem from './FollowerItem';
+import UserItem from './UserItem';
 
-import axios from '../../axios';
+import axios from '../axios';
 
 const FlexContainer = styled.div`
     display: flex;
@@ -44,7 +44,7 @@ const Main = styled.main`
     display: flex;
     flex-direction: column;
 
-    ${({ $followers }) => !$followers && `
+    ${({ $users }) => !$users && `
         align-items: center;
         justify-content: center;
         padding: 0 1em;
@@ -61,25 +61,25 @@ const P = styled.p`
     color: ${({ theme }) => theme.colors['#71767b']};
 `;
 
-const Followers = () => {
-    const { state, dispatch } = useContext(ProfileContext);
-
-    const { handle } = useParams();
+const Users = () => {
+    const { state, dispatch } = useContext(AppContext);
 
     const navigate = useNavigate();
 
-    const navigateToProfile = () => {
-        navigate(`/${handle}`);
+    const navigateToHome = () => {
+        navigate(`/home`);
     }
 
     useEffect(() => {
-        const getFollowers = async () => {
+        const getUsers = async () => {
             try {
 
-                const response = await axios.get(`/user/${handle}/followers`);
+                const response = await axios.get(`/users`);
 
                 if (response?.data.success) {
-                    dispatch({ type: 'SET_FOLLOWERS', payload: { followers: response.data.followers, currentUserId: response.data.currentUserId } });
+                    dispatch({ type: 'SET_USERS', payload: { users: response.data.users } });
+
+                    dispatch({ type: 'SET_CURRENT_USER_ID', payload: { currentUserId: response.data.currentUserId } });
                 }
 
             } catch (error) {
@@ -88,22 +88,22 @@ const Followers = () => {
 
         }
 
-        getFollowers();
-    }, [dispatch, handle])
+        getUsers();
+    }, [dispatch])
 
     return (
         <FlexContainer>
             <Header>
-                <IconButton onClick={navigateToProfile}>
+                <IconButton onClick={navigateToHome}>
                     <ArrowBackIconSC />
                 </IconButton>
-                <H1>Followers</H1>
+                <H1>Users</H1>
             </Header>
-            <Main $followers={state.followers.length}>
+            <Main $users={state.users.length}>
                 {
-                    state.followers.length ?
+                    state.users.length ?
                         <ul>
-                            {Children.toArray(state.followers.map((follower, index) => <FollowerItem {...follower} currentUserId={state.currentUserId} index={index} />))}
+                            {Children.toArray(state.users.map((user, index) => <UserItem {...user} currentUserId={state.currentUserId} index={index} />))}
                         </ul> :
                         <>
                             <H2>Your nest is empty</H2>
@@ -115,4 +115,4 @@ const Followers = () => {
     )
 }
 
-export default Followers;
+export default Users;

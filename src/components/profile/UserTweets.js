@@ -33,7 +33,7 @@ const ButtonSC = styled(Button)`
 
 const UserTweets = () => {
   const {
-    state: { tweets }, dispatch
+    state: { tweets, currentUserHandle }, dispatch
   } = useContext(ProfileContext);
 
   const { handle } = useParams();
@@ -68,10 +68,14 @@ const UserTweets = () => {
         </ul>
       ) : (
         <SectionNil>
-          <H2Nil>You haven't Tweeted yet</H2Nil>
-          <PNil>When you post a Tweet, it'll show up here.</PNil>
+          {handle === currentUserHandle ? <>
+            <H2Nil>You haven't Tweeted yet</H2Nil>
+            <PNil>When you post a Tweets, it'll show up here.</PNil>
 
-          <ButtonSC as={Link} to='../../tweet'>Tweet now</ButtonSC>
+            <ButtonSC as={Link} to='/tweet'>Tweet now</ButtonSC>
+          </> :
+            <H2Nil>@{handle} doesn't have any tweets yet</H2Nil>
+          }
         </SectionNil>
       )
     }

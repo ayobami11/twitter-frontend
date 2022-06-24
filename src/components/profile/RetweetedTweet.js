@@ -9,8 +9,6 @@ import Linkify from 'react-linkify';
 import Avatar from '@mui/material/Avatar';
 import VerifiedIcon from '@mui/icons-material/Verified';
 
-// import { AppContext } from '../../contexts/app';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import axios from '../../axios';
@@ -138,8 +136,6 @@ const Button = styled.button`
     cursor: pointer;
     position: relative;
     z-index: 3;
-    
-    /* pointer-events: none; */
 `;
 
 const Reaction = styled(Button)`
@@ -248,7 +244,7 @@ const LikedTweet = ({ tweet, index }) => {
         if (!event.target.classList.contains('reaction')
             && ![...document.getElementsByClassName('reaction')]
                 .some(element => element.contains(event.target))) {
-            navigate(`../../${tweet.handle}/status/${tweet.tweetId}`);
+            navigate(`/${tweet.handle}/status/${tweet.tweetId}`);
         }
     }
 
@@ -339,10 +335,6 @@ const LikedTweet = ({ tweet, index }) => {
                         {tweet.images.length && (
                             <Images>
                                 {Children.toArray(tweet.images.map(imageUrl => <Img src={imageUrl} alt={`Tweet posted by @${tweet.handle}`} loading='lazy' />))}
-                                {/* <Img src={Image} alt='' /> */}
-                                {/* <Img src={Image} alt='' />
-                                <Img src={Image} alt='' />
-                                <Img src={Image} alt='' /> */}
                             </Images>
                         )}
 

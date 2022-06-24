@@ -44,18 +44,11 @@ const Main = styled.main`
     display: flex;
     flex-direction: column;
 
-    padding: 0 .5em;
-
     ${({ $following }) => !$following && `
         align-items: center;
         justify-content: center;
-        padding: 0 1em;
+         padding: 0 1em;
     `}
-`;
-
-const Ul = styled.ul`
-padding: .5em 1em;
-
 `;
 
 const H2 = styled.h2`
@@ -77,7 +70,7 @@ const Following = () => {
     const navigate = useNavigate();
 
     const navigateToProfile = () => {
-        navigate(`../${handle}`);
+        navigate(`/${handle}`);
     }
 
     useEffect(() => {
@@ -111,9 +104,9 @@ const Following = () => {
             <Main $following={state.following.length}>
                 {
                     state.following.length ?
-                        <Ul>
+                        <ul>
                             {Children.toArray(state.following.map((follower, index) => <FollowingItem {...follower} currentUserId={state.currentUserId} index={index} />))}
-                        </Ul> : <>
+                        </ul> : <>
                             <H2>Your nest is empty</H2>
                             <P>But it won't be for long! People you follow will show up here.</P>
                         </>

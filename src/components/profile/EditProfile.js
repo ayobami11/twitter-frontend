@@ -94,7 +94,8 @@ const TextFieldSC = styled(TextField)`
     }
 
     .MuiInputLabel-root.Mui-focused {
-        /* color: ${({ theme }) => theme.colors.white}; */
+        color: ${({ theme }) => theme.colors.white};
+        font-weight: ${({ theme }) => theme.font.weights.bold};
     }
     
     .MuiFilledInput-root {
@@ -102,7 +103,7 @@ const TextFieldSC = styled(TextField)`
     }
 
     .MuiFilledInput-root::after {
-        border-color: ${({ theme }) => theme.colors.blue};
+        border-color: ${({ theme }) => theme.colors.white};
 
         ${({ $checkValidity, $isInputValid }) => $checkValidity && !$isInputValid && `border-color: red`};
     }
@@ -216,7 +217,7 @@ const EditProfile = () => {
     }
 
     const navigateToProfile = () => {
-        navigate(`../${handle}`);
+        navigate(`/${handle}`);
     }
 
     useEffect(() => {

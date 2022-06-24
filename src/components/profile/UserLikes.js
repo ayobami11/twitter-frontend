@@ -26,7 +26,7 @@ margin: .75em 0;
 
 const UserLikes = () => {
   const {
-    state: { likedTweets }, dispatch
+    state: { likedTweets, currentUserHandle }, dispatch
   } = useContext(ProfileContext);
 
   const { handle } = useParams();
@@ -38,8 +38,6 @@ const UserLikes = () => {
 
         if (response?.data.success) {
           dispatch({ type: 'SET_LIKED_TWEETS', payload: { likedTweets: response.data.likedTweets } });
-
-          dispatch({ type: 'SET_CURRENT_USER_ID', payload: { currentUserId: response.data.currentUserId } });
         }
       } catch (error) {
         console.log(error);
@@ -65,8 +63,13 @@ const UserLikes = () => {
         </ul>
       ) : (
         <SectionNil>
-          <H2Nil>You don't have any likes yet</H2Nil>
-          <PNil>Tap the heart on any Tweet to show it some love. When you do, it'll show up here.</PNil>
+          {handle === currentUserHandle ?
+            <>
+              <H2Nil>You don't have any likes yet</H2Nil>
+              <PNil>Tap the heart on any Tweet to show it some love. When you do, it'll show up here.</PNil>
+            </> :
+            <H2Nil>@{handle} doesn't have any likes yet</H2Nil>
+          }
         </SectionNil>
       )
     }
