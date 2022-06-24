@@ -318,11 +318,11 @@ const LikedTweet = ({ tweet, index }) => {
                         </Bio>
 
                         {
-                            tweet.images.length && (
+                            tweet.images.length ? (
                                 <Images>
                                     {Children.toArray(tweet.images.map(imageUrl => <Img src={imageUrl} alt={`Tweet posted by @${tweet.handle}`} loading='lazy' />))}
                                 </Images>
-                            )
+                            ) : null
                         }
 
                         <Menu>

@@ -36,7 +36,7 @@ export const formatTimeElapsed = dateString => {
         return `${seconds}s`;
     } else if (days === 0 && hours === 0) {
         return `${minutes}m`;
-    } else if (days === '0') {
+    } else if (days === 0) {
         return `${hours}h`;
     } else {
         return `${initialDate.getDate()} ${months[

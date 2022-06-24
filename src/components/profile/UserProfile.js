@@ -63,24 +63,49 @@ const Figcaption = styled.figcaption`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 1em;
 
     > div {
         margin-top: .75em;
     }
 `;
 
-const Name = styled.h2`
+const Author = styled.div`
+    /* ensures text ellipsis works properly */
+    overflow: hidden;
+    width: 100%;
+`;
+
+const Name = styled.p`
     color: ${({ theme }) => theme.colors['#e7e9ea']};
-margin-bottom: .1em;
+    font-weight: ${({ theme }) => theme.font.weights.bold};
+
+    display: flex;
+    align-items: center;
+    gap: .25em;
+    /* prevents flex parent from growing bigger than necessary */
+    max-width: fit-content;
+    
+    span {
+        flex: 1;
+
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 `;
 
 const VerifiedIconSC = styled(VerifiedIcon)`
     font-size: 1rem;
-    margin-left: 0.25em;
-    `;
+`;
 
-const Handle = styled.span`
+const Handle = styled.p`
     color: ${({ theme }) => theme.colors['#71767b']};
+    margin-top: .25em;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 `;
 
 const Bio = styled.p`
@@ -248,7 +273,7 @@ const UserProfile = () => {
                     dispatch({
                         type: 'SET_CURRENT_USER_DETAILS',
                         payload: { currentUserId: response.data.currentUserId, currentUserHandle: response.data.currentUserHandle }
-                      });
+                    });
                 }
             } catch (error) {
                 console.log(error)
@@ -280,15 +305,17 @@ const UserProfile = () => {
                                     alt={`${state.profile?.handle} profile picture`} />
 
                                 <Figcaption>
-                                    <div>
-                                        <Name>{state.profile?.name}</Name>
-                                        {state.profile?.verified && <VerifiedIconSC />}
+                                    <Author>
+                                        <Name>
+                                            <span>{state.profile?.name}</span>
+                                            {state.profile?.verified && <VerifiedIconSC />}
+                                        </Name>
                                         <Handle>@{state.profile?.handle}</Handle>
-                                    </div>
+                                    </Author>
 
-                                    {state.profile?._id === state.profile?.currentUserId ?
+                                    {state.profile?._id === state.currentUserId ?
                                         <ButtonSC as={Link} to='edit-profile'>Edit profile</ButtonSC> :
-                                        followers?.includes(state.profile?.currentUserId) ?
+                                        followers?.includes(state.currentUserId) ?
                                             <ButtonSC onClick={unfollowUser}>Following</ButtonSC> :
                                             <FollowButton onClick={followUser}>Follow</FollowButton>
                                     }
