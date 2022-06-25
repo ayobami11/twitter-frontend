@@ -184,8 +184,6 @@ const Login = () => {
                     attachTokenToRequest(response.data.user.accessToken);
 
                     navigate('/home');
-
-
                 }
             } catch (error) {
                 if (error?.response) {

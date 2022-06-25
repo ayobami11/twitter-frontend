@@ -12,7 +12,7 @@ export const Button = styled.button`
     border-radius: 1.25em;
     outline: none;
 
-    padding: 0.6em 1.25em;
+    padding: 0.75em 1.25em;
     width: fit-content;
 
     :hover {

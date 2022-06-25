@@ -43,11 +43,10 @@ const Main = styled.main`
 
 const FormContainer = styled.div`
   display: flex;
-  gap: 1em;
+  gap: calc(.5em + 1vw);
 
   margin: 1em 0;
-  
-  `;
+`;
 
 const CloseIconSC = styled(CloseIcon)`
   color: ${({ theme }) => theme.colors.white};
