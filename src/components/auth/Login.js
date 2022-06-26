@@ -120,7 +120,7 @@ const P = styled.p`
 `;
 
 const attachTokenToRequest = (token = null) => {
-    axios.defaults.headers['Authorization'] = token ? `Bearer ${token}` : '';
+    axios.defaults.headers.common['Authorization'] = token ? `Bearer ${token}` : '';
 };
 
 const Login = () => {
@@ -129,7 +129,6 @@ const Login = () => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
     const [checkValidity, setCheckValidity] = useState(false);
-
 
     const navigate = useNavigate();
 
