@@ -24,7 +24,7 @@ import { formatTweetDate } from '../../utils/formatTweetDate';
 import { ProfileContext } from '../../contexts/profile';
 
 const Header = styled.header`
-border-bottom: 1px solid ${({ theme }) => theme.colors['#71767b']};
+    border-bottom: 1px solid ${({ theme }) => theme.colors['#2f3336']};
     color: ${({ theme }) => theme.colors['#e7e9ea']};
     padding: .75em;
 
@@ -38,7 +38,7 @@ const ArrowBackIconSC = styled(ArrowBackIcon)`
 `;
 
 const H1 = styled.h1`
-    font-size: 1.4rem;
+    font-size: 1.25rem;
     margin-left: 1em;
 `;
 
@@ -53,7 +53,7 @@ const Main = styled.main`
 const ProfileDetails = styled.section`
     margin: 1.5em auto .5em;
     width: 90%;
-    `;
+`;
 
 const Figure = styled.figure`
 

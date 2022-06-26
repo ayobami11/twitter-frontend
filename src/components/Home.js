@@ -142,9 +142,7 @@ const Home = () => {
                     profile ? (
                         <HomeContainer>
                             <Sidebar isSidebarOpen={isSidebarOpen} closeSidebar={closeSidebar} />
-
                             <Header>
-                                {/* <Div> */}
                                 <IconButton onClick={openSidebar}>
 
                                     <Avatar
@@ -154,7 +152,6 @@ const Home = () => {
                                     />
                                 </IconButton>
                                 <H1>Home</H1>
-                                {/* </Div> */}
                             </Header >
                             <Main>
                                 <TweetList />
