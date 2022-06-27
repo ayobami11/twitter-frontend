@@ -8,7 +8,7 @@ import Avatar from '@mui/material/Avatar';
 
 import { Button } from '../general/Button';
 
-import { UserContext } from '../../contexts/user';
+import { ProfileContext } from '../../contexts/profile';
 import { TweetContext } from '../../contexts/tweet';
 import { AppContext } from '../../contexts/app';
 
@@ -55,7 +55,7 @@ const Textarea = styled.textarea`
 `;
 
 const CommentForm = () => {
-    const { state: { user } } = useContext(UserContext);
+    const { state: { profile }, dispatch: profileDispatch } = useContext(ProfileContext);
     const { state: { tweet }, dispatch: tweetDispatch } = useContext(TweetContext);
     const { dispatch: appDispatch } = useContext(AppContext);
 
@@ -95,7 +95,7 @@ const CommentForm = () => {
                     appDispatch({ type: 'SET_ALERT', payload: { message: 'Comment sent successfully.' } });
 
                     tweetDispatch({ type: 'HANDLE_COMMENT', payload: { comment: response.data.comment } });
-                    
+
                     setComment('');
                 }
             } catch (error) {
@@ -106,12 +106,30 @@ const CommentForm = () => {
         createComment();
     };
 
+    useEffect(() => {
+        const getUserProfile = async () => {
+            try {
+
+                const response = await axios.get('/user');
+
+                if (response?.data.success) {
+                    profileDispatch({ type: 'SET_PROFILE', payload: { profile: response.data.user } });
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        getUserProfile();
+
+    }, [profileDispatch]);
+
     return (
         <Section>
             <Avatar
                 sx={{ width: 50, height: 50, background: 'hsl(0, 3%, 42%)' }}
-                src={user?.avatarUrl}
-                alt={`${user?.handle} profile picture`}
+                src={profile?.avatarUrl}
+                alt={`${profile?.handle} profile picture`}
             />
             <Form onSubmit={handleSubmit}>
                 <p>

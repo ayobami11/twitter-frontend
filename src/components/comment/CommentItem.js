@@ -14,11 +14,13 @@ const Li = styled.li`
 
 const Figure = styled.figure`
     display: flex;
-    gap: 1em;
+    gap: 1.25em;
 `;
 
 const Figcaption = styled.figcaption`
-    flex: 100%;
+    /* necessary to ensure text ellipsis works */
+    overflow: hidden;
+    width: 100%;
 `;
 
 const UserInfo = styled.div`
@@ -70,6 +72,16 @@ const Handle = styled.p`
     white-space: nowrap;
 `;
 
+const Time = styled.time`
+    color: ${({ theme }) => theme.colors['#71767b']};
+    white-space: nowrap;
+    flex-shrink: 0;
+
+    > span {
+        margin-left: .5em;
+    }
+`;
+
 const Bio = styled.p`    
     a {
         color: ${({ theme }) => theme.colors.blue};
@@ -85,16 +97,6 @@ const Bio = styled.p`
     }
 `;
 
-const Time = styled.time`
-    color: ${({ theme }) => theme.colors['#71767b']};
-    white-space: nowrap;
-    flex-shrink: 0;
-
-    > span {
-        margin-left: .5em;
-    }
-`;
-
 const CommentItem = ({ message, handle, name, avatarUrl, verified, createdAt }) => {
     return (
         <Li>
@@ -107,7 +109,7 @@ const CommentItem = ({ message, handle, name, avatarUrl, verified, createdAt }) 
                         alt={`${handle} profile picture`}
                     />
                     <Figcaption>
-                    <UserInfo>
+                        <UserInfo>
                             <Author>
                                 <Name>
                                     <span>{name}</span>
@@ -118,18 +120,13 @@ const CommentItem = ({ message, handle, name, avatarUrl, verified, createdAt }) 
                             <Time>&middot;<span>{formatTimeElapsed(createdAt)}</span></Time>
                         </UserInfo>
 
-                        {message && (
-                            <Bio>
-                                <Linkify componentDecorator={(decoratedHref, decoratedText, key) =>
-                                    <a href={decoratedHref} target='_blank' key={key} rel="noreferrer">{decoratedText}</a>
-                                }>
-                                    {message}
-                                </Linkify>
-                            </Bio>
-                        )
-                        }
-
-                        
+                        <Bio>
+                            <Linkify componentDecorator={(decoratedHref, decoratedText, key) =>
+                                <a href={decoratedHref} target='_blank' key={key} rel="noreferrer">{decoratedText}</a>
+                            }>
+                                {message}
+                            </Linkify>
+                        </Bio>
                     </Figcaption>
                 </Figure>
             </article>

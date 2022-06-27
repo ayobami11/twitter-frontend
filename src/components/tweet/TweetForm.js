@@ -1,8 +1,9 @@
-import { useState, useContext, useRef } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
 import { AppContext } from '../../contexts/app';
+import { ProfileContext } from '../../contexts/profile';
 
 import styled from 'styled-components';
 
@@ -99,7 +100,8 @@ const ButtonSC = styled(Button)`
 `;
 
 const TweetForm = () => {
-  const { state: { user }, dispatch: appDispatch } = useContext(AppContext);
+  const { dispatch: appDispatch } = useContext(AppContext);
+  const { state: { profile }, dispatch } = useContext(ProfileContext);
 
   const inputRef = useRef();
 
@@ -186,6 +188,24 @@ const TweetForm = () => {
     postTweet();
   }
 
+  useEffect(() => {
+    const getUserProfile = async () => {
+        try {
+
+            const response = await axios.get('/user');
+
+            if (response?.data.success) {
+                dispatch({ type: 'SET_PROFILE', payload: { profile: response.data.user } });
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    getUserProfile();
+
+}, [dispatch]);
+
   return (
     <PageContainer>
       <Header>
@@ -201,8 +221,8 @@ const TweetForm = () => {
 
           <Avatar
             sx={{ width: 50, height: 50, background: 'hsl(0, 3%, 42%)' }}
-            src={user?.avatarUrl}
-            alt={`${user?.handle} profile picture`}
+            src={profile?.avatarUrl}
+            alt={`${profile?.handle} profile picture`}
           />
 
           <Form id='tweet-form' onSubmit={handleSubmit}>
