@@ -26,8 +26,11 @@ const AddIconSC = styled(AddIcon)`
     color: ${({ theme }) => theme.colors.white};
 
     font-size: 3rem;
-    padding: .1em;
+    padding: .2em;
 
+    :hover {
+        filter: brightness(110%);
+    }
 `;
 
 const HomeContainer = styled.div`    

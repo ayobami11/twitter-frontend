@@ -44,9 +44,11 @@ const H1 = styled.h1`
 const Button = styled.button`
     background: transparent;
     color: ${({ theme }) => theme.colors.white};
+    cursor: pointer;
+
     border: none;
     font-weight: ${({ theme }) => theme.font.weights.bold};
-    font-size: 1.125rem;
+    font-size: 1rem;
 `;
 
 const Section = styled.section`

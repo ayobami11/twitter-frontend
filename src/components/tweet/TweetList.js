@@ -1,8 +1,14 @@
 import { useContext } from 'react';
 
+import styled from 'styled-components';
+
 import { AppContext } from '../../contexts/app';
 
 import TweetItem from '../tweet/TweetItem';
+
+const H2 = styled.h2`
+    margin: 1em;
+`;
 
 const TweetList = () => {
     const {
@@ -20,7 +26,7 @@ const TweetList = () => {
                             index={index}
                         />
                     ))}
-                </ul> : <p>No tweets.</p>
+                </ul> : <H2>No tweets.</H2>
             }
         </>
     );

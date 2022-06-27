@@ -50,7 +50,9 @@ const Tweet = styled.div`
     }
 `;
 
-const H2 = styled.h2``;
+const H2Nil = styled.h2`
+    margin: 1em;
+`;
 
 const ArticleHeader = styled.header`
     margin: 1em 0;
@@ -114,9 +116,7 @@ const Handle = styled.p`
 `;
 
 const Engagements = styled.div`
-    border-bottom: 1px solid rgb(47, 51, 54);
     border-top: 1px solid rgb(47, 51, 54);
-    margin: 1em 0;
 `;
 
 const Dl = styled.dl`
@@ -146,13 +146,20 @@ const Time = styled.time`
     color: ${({ theme }) => theme.colors['#71767b']};
 
     margin: 1em 0;
+    display: block;
 
     span {
         padding: 0 0.5em;
+
+        &:first-child {
+            padding-left: 0;
+        } 
     }
 `;
 
 const Bio = styled.p`    
+    margin: 1em 0;
+
     a {
         color: ${({ theme }) => theme.colors.blue};
         display: inline-block;
@@ -195,6 +202,9 @@ const Img = styled.img`
 
 const Reactions = styled.div`
     border-bottom: 1px solid rgb(47, 51, 54);
+    border-top: 1px solid rgb(47, 51, 54);
+
+    padding: .5em 0;
 `;
 
 const Menu = styled.menu`
@@ -202,8 +212,6 @@ const Menu = styled.menu`
     justify-content: space-around;
 
     max-width: 900px;
-
-    margin: 1em 0;
 
     color: ${({ theme }) => theme.colors['#71767b']};
 `;
@@ -349,7 +357,7 @@ const TweetDetails = () => {
                 <Link to='/home'>
                     <ArrowBackIcon />
                 </Link>
-                <H2>Tweet</H2>
+                <h2>Tweet</h2>
             </Header>
             {
                 loading ? <CircularProgressWithIcon /> : tweet ? (
@@ -395,22 +403,30 @@ const TweetDetails = () => {
                                 <span>{formatTweetDate(tweet.createdAt)}</span>
                             </Time>
 
-                            <Engagements>
-                                <Dl>
-                                    <ListItem>
-                                        <Dt>{tweet.comments.length || ''}</Dt>
-                                        <Dd>Comments</Dd>
-                                    </ListItem>
-                                    <ListItem>
-                                        <Dt>{tweet.retweets.length || ''}</Dt>
-                                        <Dd>Retweets</Dd>
-                                    </ListItem>
-                                    <ListItem>
-                                        <Dt>{tweet.likes.length || ''}</Dt>
-                                        <Dd>Likes</Dd>
-                                    </ListItem>
-                                </Dl>
-                            </Engagements>
+                            {!tweet.comments.length && !tweet.retweets.length && !tweet.likes.length ?
+                                null :
+                                <Engagements>
+                                    <Dl>
+                                        {
+                                            tweet.comments.length ? <ListItem>
+                                                <Dt>{tweet.comments.length}</Dt>
+                                                <Dd>{`Comment${tweet.comments.length > 1 ? 's' : ''}`}</Dd>
+                                            </ListItem> : null
+                                        }
+                                        {
+                                            tweet.retweets.length ? <ListItem>
+                                                <Dt>{tweet.retweets.length}</Dt>
+                                                <Dd>{`Retweet${tweet.retweets.length > 1 ? 's' : ''}`}</Dd>
+                                            </ListItem> : null
+                                        }
+                                        {
+                                            tweet.likes.length ? <ListItem>
+                                                <Dt>{tweet.likes.length}</Dt>
+                                                <Dd>{`Like${tweet.likes.length > 1 ? 's' : ''}`}</Dd>
+                                            </ListItem> : null
+                                        }
+                                    </Dl>
+                                </Engagements>}
 
                             <Reactions>
                                 <Menu>
@@ -443,7 +459,7 @@ const TweetDetails = () => {
                     </Tweet>
                 )
                     :
-                    <p>No tweet found.</p>
+                    <H2Nil>No tweet found.</H2Nil>
             }
 
         </>

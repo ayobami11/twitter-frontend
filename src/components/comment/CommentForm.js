@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useContext } from 'react';
 
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import styled from 'styled-components';
 
@@ -30,7 +30,7 @@ const Form = styled.form`
     flex-direction: column;
 `;
 
-const Handle = styled.span`
+const Handle = styled(Link)`
     color: ${({ theme }) => theme.colors.blue};
 `;
 
@@ -115,7 +115,7 @@ const CommentForm = () => {
             />
             <Form onSubmit={handleSubmit}>
                 <p>
-                    Replying to <Handle>@{tweet?.handle}</Handle>
+                    Replying to <Handle to={`/${tweet?.handle}`}>@{tweet?.handle}</Handle>
                 </p>
                 <TextareaContainer $containerHeight={containerHeight}>
                     <Textarea

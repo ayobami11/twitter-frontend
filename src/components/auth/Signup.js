@@ -230,7 +230,7 @@ const Signup = () => {
                             variant='filled'
                             label='Name'
                             placeholder='John Doe'
-                            inputProps={{ className: 'form-input', maxLength: 20 }}
+                            inputProps={{ className: 'form-input', maxLength: 30 }}
                             fullWidth
                             required
                             helperText={checkValidity && state.validationMessages.name}
@@ -244,7 +244,7 @@ const Signup = () => {
                             name='handle'
                             value={state.signupDetails.handle}
                             placeholder='johndoe'
-                            inputProps={{ className: 'form-input', maxLength: 20 }}
+                            inputProps={{ className: 'form-input', maxLength: 30, pattern: '^[a-zA-Z0-9_]+$' }}
                             onChange={handleInputChange}
                             InputProps={{
                                 startAdornment: <InputAdornment position='start'><AtIcon>@</AtIcon></InputAdornment>
@@ -253,7 +253,7 @@ const Signup = () => {
                             label='Handle'
                             fullWidth
                             required
-                            helperText={checkValidity && state.validationMessages.handle}
+                            helperText={checkValidity && 'Handle can only contain alphanumeric and underscore characters.'}
                             error={checkValidity && Boolean(state.validationMessages.handle)}
                         />
                         <TextFieldSC
