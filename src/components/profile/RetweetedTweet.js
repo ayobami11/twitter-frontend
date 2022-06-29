@@ -87,7 +87,10 @@ const Handle = styled.p`
     white-space: nowrap;
 `;
 
-const Bio = styled.p`    
+const Message = styled.p` 
+    line-height: 1.5;
+    white-space: pre-line;
+
     a {
         color: ${({ theme }) => theme.colors.blue};
         display: inline-block;
@@ -129,7 +132,6 @@ const Img = styled.img`
 `;
 
 const Button = styled.button`
-
     background: transparent;
     border: none;
     color: ${({ theme }) => theme.colors['#71767b']};
@@ -138,11 +140,10 @@ const Button = styled.button`
     z-index: 3;
 `;
 
-const Reaction = styled(Button)`
-display: flex;
-align-items: center;
-gap: 0.5em;
-
+const ReactionButton = styled(Button)`
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
 `;
 
 const FontAwesomeIconSC = styled(FontAwesomeIcon)`
@@ -152,7 +153,7 @@ const FontAwesomeIconSC = styled(FontAwesomeIcon)`
     font-size: 1.125rem;
 `;
 
-const CommentIcon = styled(Reaction)`
+const CommentButton = styled(ReactionButton)`
     :hover {
         svg {
             background: ${({ theme }) => setRgbaValue(theme.colors.blue, 0.09)};
@@ -165,7 +166,7 @@ const CommentIcon = styled(Reaction)`
     }
 `;
 
-const RetweetIcon = styled(Reaction)`
+const RetweetButton = styled(ReactionButton)`
     path, 
     span {
         color: ${({ theme, $retweeted }) => $retweeted && theme.colors.green};
@@ -184,7 +185,7 @@ const RetweetIcon = styled(Reaction)`
     }
 `;
 
-const LikeIcon = styled(Reaction)`
+const LikeButton = styled(ReactionButton)`
     path, 
     span {
         color: ${({ theme, $liked }) => $liked && theme.colors.pink};
@@ -198,19 +199,6 @@ const LikeIcon = styled(Reaction)`
         path,
         span {
             color: ${({ theme }) => theme.colors.pink};
-        }
-    }
-`;
-
-const ShareIcon = styled(Reaction)`
-    :hover {
-        svg {
-            background: ${({ theme }) => setRgbaValue(theme.colors.blue, 0.09)};
-        }
-
-        path,
-        span {
-            color: ${({ theme }) => theme.colors.blue};
         }
     }
 `;
@@ -241,8 +229,8 @@ const LikedTweet = ({ tweet, index }) => {
     const navigate = useNavigate();
 
     const navigateToTweet = (event) => {
-        if (!event.target.classList.contains('reaction')
-            && ![...document.getElementsByClassName('reaction')]
+        if (!event.target.classList.contains('no-link')
+            && ![...document.getElementsByClassName('no-link')]
                 .some(element => element.contains(event.target))) {
             navigate(`/${tweet.handle}/status/${tweet.tweetId}`);
         }
@@ -322,13 +310,13 @@ const LikedTweet = ({ tweet, index }) => {
                             <Time>&middot;<span>{formatTimeElapsed(tweet.createdAt)}</span></Time>
                         </UserInfo>
 
-                        <Bio>
+                        <Message>
                             <Linkify componentDecorator={(decoratedHref, decoratedText, key) =>
                                 <a href={decoratedHref} target='_blank' key={key} rel="noreferrer">{decoratedText}</a>
                             }>
                                 {tweet.message}
                             </Linkify>
-                        </Bio>
+                        </Message>
 
                         {
                             tweet.images.length ? (
@@ -340,20 +328,20 @@ const LikedTweet = ({ tweet, index }) => {
 
                         <Menu>
                             <li>
-                                <CommentIcon className='reaction'>
+                                <CommentButton>
                                     <FontAwesomeIconSC icon='fa-regular fa-comment' />
                                     <span>{tweet.comments.length || ''}</span>
-                                </CommentIcon>
+                                </CommentButton>
                             </li>
                             <li>
-                                <RetweetIcon className='reaction' onClick={
+                                <RetweetButton className='no-link' onClick={
                                     isTweetRetweeted ? undoRetweet : retweetTweet} $retweeted={isTweetRetweeted}>
                                     <FontAwesomeIconSC icon='fa-solid fa-retweet' />
                                     <span>{tweet.retweets.length || ''}</span>
-                                </RetweetIcon>
+                                </RetweetButton>
                             </li>
                             <li>
-                                <LikeIcon className='reaction' onClick={
+                                <LikeButton className='no-link' onClick={
                                     isTweetLiked ? unlikeTweet : likeTweet} $liked={isTweetLiked}>
                                     {isTweetLiked ?
                                         <FontAwesomeIconSC icon='fa-solid fa-heart' />
@@ -361,12 +349,7 @@ const LikedTweet = ({ tweet, index }) => {
                                         <FontAwesomeIconSC icon='fa-regular fa-heart' />
                                     }
                                     <span>{tweet.likes.length || ''}</span>
-                                </LikeIcon>
-                            </li>
-                            <li>
-                                <ShareIcon className='reaction'>
-                                    <FontAwesomeIconSC icon='fa-solid fa-arrow-up-from-bracket' />
-                                </ShareIcon>
+                                </LikeButton>
                             </li>
                         </Menu>
                     </Figcaption>

@@ -1,5 +1,10 @@
 export const initialState = {
     loading: true,
+    deleteDialog: {
+        open: false,
+        tweetId: '',
+        index: null
+    },
     currentUserId: '',
     tweets: [],
     users: [],
@@ -42,6 +47,7 @@ export const reducer = (state, action) => {
             }
         }
 
+        // reaction actions
         case 'HANDLE_LIKE': {
             const tweets = state.tweets.map((tweet, index) => {
                 if (index === action.payload.index) {
@@ -52,7 +58,7 @@ export const reducer = (state, action) => {
                 }
 
                 return tweet;
-            })
+            });
 
             return {
                 ...state,
@@ -71,7 +77,7 @@ export const reducer = (state, action) => {
                 }
 
                 return tweet;
-            })
+            });
 
             return {
                 ...state,
@@ -90,7 +96,7 @@ export const reducer = (state, action) => {
                 }
 
                 return tweet;
-            })
+            });
 
             return {
                 ...state,
@@ -109,7 +115,7 @@ export const reducer = (state, action) => {
                 }
 
                 return tweet;
-            })
+            });
 
             return {
                 ...state,
@@ -118,6 +124,7 @@ export const reducer = (state, action) => {
 
         }
 
+        // follow / unfollow actions
         case 'HANDLE_FOLLOW': {
             const users = state.users.map((user, index) => {
                 if (index === action.payload.index) {
@@ -144,7 +151,7 @@ export const reducer = (state, action) => {
                 }
 
                 return user;
-            })
+            });
 
             return {
                 ...state,
@@ -152,6 +159,7 @@ export const reducer = (state, action) => {
             }
         }
 
+        // alert actions
         case 'SET_ALERT': {
             return {
                 ...state,
@@ -163,6 +171,62 @@ export const reducer = (state, action) => {
             return {
                 ...state,
                 alert: { open: false, message: '' }
+            }
+        }
+
+        // delete dialog actions
+
+        // displays confirmation delete dialog when delete tweet button is clicked
+        case 'SHOW_DELETE_DIALOG': {
+            return {
+                ...state,
+                deleteDialog: {
+                    ...state.deleteDialog,
+                    open: true,
+                    tweetId: action.payload.tweetId,
+                    index: action.payload?.index ?? null
+                }
+            }
+        }
+
+        // hides tweet when delete button in confirmation dialog is clicked
+        case 'HIDE_DELETE_DIALOG': {
+            return {
+                ...state,
+                deleteDialog: {
+                    ...state.deleteDialog,
+                    open: false
+                }
+            }
+        }
+
+        // closes delete dialog when cancel button is clicked or when dialog loses focus
+        case 'HANDLE_CANCEL_DELETE': {
+            return {
+                ...state,
+                deleteDialog: {
+                    ...state.deleteDialog,
+                    open: false,
+                    tweetId: '',
+                    index: null
+                }
+            }
+        }
+
+        // action performed when delete button in confirmation dialog is clicked
+        case 'HANDLE_TWEET_DELETION': {
+            const tweets = state.tweets.filter((tweet, index) => index !== state.deleteDialog.index);
+
+            return {
+                ...state,
+                tweets,
+                deleteDialog: {
+                    ...state.deleteDialog,
+                    open: false,
+                    tweetId: '',
+                    index: null,
+                    redirect: true
+                }
             }
         }
 

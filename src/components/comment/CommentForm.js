@@ -51,6 +51,7 @@ const Textarea = styled.textarea`
     outline: none;
     border: none;
 
+    line-height: 1.5;
     height: ${({ $textareaHeight }) => $textareaHeight};
 `;
 

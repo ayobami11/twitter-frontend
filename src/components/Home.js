@@ -23,9 +23,10 @@ import axios from '../axios';
 const AddIconSC = styled(AddIcon)`
     background: ${({ theme }) => theme.colors.blue};
     border-radius: 50%;
+    box-shadow: 0 0 3px rgba(0, 0, 0, .5);
     color: ${({ theme }) => theme.colors.white};
 
-    font-size: 3rem;
+    font-size: 3.25rem;
     padding: .2em;
 
     :hover {

@@ -110,7 +110,9 @@ const Handle = styled.p`
 
 const Bio = styled.p`
     color: ${({ theme }) => theme.colors['#e7e9ea']};
+    line-height: 1.5;
     margin: 1em 0;
+    white-space: pre-line;
 
     a {
         color: ${({ theme }) => theme.colors.blue};

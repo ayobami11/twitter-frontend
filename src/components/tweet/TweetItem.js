@@ -8,12 +8,15 @@ import Linkify from 'react-linkify';
 
 import Avatar from '@mui/material/Avatar';
 import VerifiedIcon from '@mui/icons-material/Verified';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import { AppContext } from '../../contexts/app';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import axios from '../../axios';
+
+import { Button } from '../general/Button';
 
 import { formatTimeElapsed } from '../../utils/formatTimeElapsed';
 import { setRgbaValue } from '../../utils/setRgbaValue';
@@ -88,7 +91,10 @@ const Handle = styled.p`
     white-space: nowrap;
 `;
 
-const Bio = styled.p`    
+const Message = styled.p` 
+    line-height: 1.5;
+    white-space: pre-line;
+
     a {
         color: ${({ theme }) => theme.colors.blue};
         display: inline-block;
@@ -130,7 +136,7 @@ const Img = styled.img`
     aspect-ratio: 1 / 1;
 `;
 
-const Button = styled.button`
+const ReactionButton = styled.button`
     background: transparent;
     border: none;
     color: ${({ theme }) => theme.colors['#71767b']};
@@ -139,7 +145,7 @@ const Button = styled.button`
     z-index: 3;
 `;
 
-const Reaction = styled(Button)`
+const Reaction = styled(ReactionButton)`
 display: flex;
 align-items: center;
 gap: 0.5em;
@@ -153,7 +159,7 @@ const FontAwesomeIconSC = styled(FontAwesomeIcon)`
     font-size: 1.125rem;
 `;
 
-const CommentIcon = styled(Reaction)`
+const CommentButton = styled(Reaction)`
     :hover {
         svg {
             background: ${({ theme }) => setRgbaValue(theme.colors.blue, 0.09)};
@@ -166,7 +172,7 @@ const CommentIcon = styled(Reaction)`
     }
 `;
 
-const RetweetIcon = styled(Reaction)`
+const RetweetButton = styled(Reaction)`
     path, 
     span {
         color: ${({ theme, $retweeted }) => $retweeted && theme.colors.green};
@@ -185,7 +191,7 @@ const RetweetIcon = styled(Reaction)`
     }
 `;
 
-const LikeIcon = styled(Reaction)`
+const LikeButton = styled(Reaction)`
     path, 
     span {
         color: ${({ theme, $liked }) => $liked && theme.colors.pink};
@@ -223,6 +229,15 @@ const Menu = styled.menu`
     color: ${({ theme }) => theme.colors['#71767b']};
 `;
 
+const DeleteButton = styled(Button)`
+    background: hsl(0, 85%, 60%);
+    margin: .5em 0;
+
+    display: flex;
+    align-items: center;
+    gap: .5em;
+`;
+
 const TweetItem = ({ tweet, index }) => {
     const { state: { currentUserId }, dispatch } = useContext(AppContext);
 
@@ -230,8 +245,9 @@ const TweetItem = ({ tweet, index }) => {
 
     const navigateToTweet = (event) => {
         // Navigates to the tweet details page only when a link in the tweet or reaction (like, retweet) is not clicked
-        if (event.target.nodeName !== 'A' && !event.target.classList.contains('reaction')
-            && ![...document.getElementsByClassName('reaction')].some(element => element.contains(event.target))) {
+        if (event.target.nodeName !== 'A' && event.target.nodeName !== 'BUTTON' && !event.target.classList.contains('no-link')
+            && ![...document.getElementsByClassName('no-link')].some(element => element.contains(event.target))) {
+
             navigate(`/${tweet.handle}/status/${tweet._id}`);
         }
     }
@@ -284,6 +300,10 @@ const TweetItem = ({ tweet, index }) => {
         }
     };
 
+    const showDeleteDialog = () => {
+        dispatch({ type: 'SHOW_DELETE_DIALOG', payload: { tweetId: tweet._id, index } });
+    }
+
     const isTweetLiked = tweet.likes?.includes(currentUserId);
     const isTweetRetweeted = tweet.retweets?.includes(currentUserId);
 
@@ -311,13 +331,13 @@ const TweetItem = ({ tweet, index }) => {
                         </UserInfo>
 
 
-                        <Bio>
+                        <Message>
                             <Linkify componentDecorator={(decoratedHref, decoratedText, key) =>
                                 <a href={decoratedHref} target='_blank' key={key} rel="noreferrer">{decoratedText}</a>
                             }>
                                 {tweet.message}
                             </Linkify>
-                        </Bio>
+                        </Message>
 
                         {
                             tweet.images.length ?
@@ -328,20 +348,20 @@ const TweetItem = ({ tweet, index }) => {
 
                         <Menu>
                             <li>
-                                <CommentIcon>
+                                <CommentButton>
                                     <FontAwesomeIconSC icon='fa-regular fa-comment' />
                                     <span>{tweet.comments.length || ''}</span>
-                                </CommentIcon>
+                                </CommentButton>
                             </li>
                             <li>
-                                <RetweetIcon className='reaction' onClick={
+                                <RetweetButton className='no-link' onClick={
                                     isTweetRetweeted ? undoRetweet : retweetTweet} $retweeted={isTweetRetweeted}>
                                     <FontAwesomeIconSC icon='fa-solid fa-retweet' />
                                     <span>{tweet.retweets.length || ''}</span>
-                                </RetweetIcon>
+                                </RetweetButton>
                             </li>
                             <li>
-                                <LikeIcon className='reaction' onClick={
+                                <LikeButton className='no-link' onClick={
                                     isTweetLiked ? unlikeTweet : likeTweet} $liked={isTweetLiked}>
                                     {isTweetLiked ?
                                         <FontAwesomeIconSC icon='fa-solid fa-heart' />
@@ -349,9 +369,11 @@ const TweetItem = ({ tweet, index }) => {
                                         <FontAwesomeIconSC icon='fa-regular fa-heart' />
                                     }
                                     <span>{tweet.likes.length || ''}</span>
-                                </LikeIcon>
+                                </LikeButton>
                             </li>
                         </Menu>
+
+                        {currentUserId === tweet.userId ? <DeleteButton className='no-link' onClick={showDeleteDialog}><DeleteIcon /> Delete Tweet</DeleteButton> : null}
                     </Figcaption>
                 </Figure>
             </article>

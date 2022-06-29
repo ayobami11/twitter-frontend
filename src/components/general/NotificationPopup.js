@@ -41,5 +41,3 @@ export const NotificationPopup = () => {
         </Snackbar>
     );
 };
-
-export default NotificationPopup;

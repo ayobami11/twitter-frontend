@@ -63,6 +63,7 @@ const Textarea = styled.textarea`
   border: none;
   font-size: 1rem;
   height: min(50vh, 300px);
+  line-height: 1.5;
   outline: none;
   padding: 1em; 
   resize: none;
@@ -190,21 +191,21 @@ const TweetForm = () => {
 
   useEffect(() => {
     const getUserProfile = async () => {
-        try {
+      try {
 
-            const response = await axios.get('/user');
+        const response = await axios.get('/user');
 
-            if (response?.data.success) {
-                dispatch({ type: 'SET_PROFILE', payload: { profile: response.data.user } });
-            }
-        } catch (error) {
-            console.log(error)
+        if (response?.data.success) {
+          dispatch({ type: 'SET_PROFILE', payload: { profile: response.data.user } });
         }
+      } catch (error) {
+        console.log(error)
+      }
     }
 
     getUserProfile();
 
-}, [dispatch]);
+  }, [dispatch]);
 
   return (
     <PageContainer>

@@ -3,6 +3,7 @@ import { createContext, useReducer } from 'react';
 import { initialState, reducer } from '../reducers/app';
 
 import { NotificationPopup } from '../components/general/NotificationPopup';
+import { DeleteTweetDialog } from '../components/tweet/DeleteTweetDialog';
 
 export const AppContext = createContext(null);
 
@@ -12,7 +13,10 @@ export const AppContextWrapper = ({ children }) => {
     return (
         <AppContext.Provider value={{ state, dispatch }}>
             {children}
+            
             <NotificationPopup />
+
+            <DeleteTweetDialog />
         </AppContext.Provider>
     );
 };

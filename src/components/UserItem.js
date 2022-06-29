@@ -91,6 +91,7 @@ const Bio = styled.p`
     -webkit-box-orient: vertical;
     overflow: hidden;
 
+    line-height: 1.5;
     margin-top: .75em;
 `;
 

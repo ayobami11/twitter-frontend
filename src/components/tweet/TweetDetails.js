@@ -6,6 +6,7 @@ import styled from 'styled-components';
 
 import Linkify from 'react-linkify';
 
+import { AppContext } from '../../contexts/app';
 import { TweetContext } from '../../contexts/tweet';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,11 +14,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Avatar from '@mui/material/Avatar';
 import VerifiedIcon from '@mui/icons-material/Verified';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import { CircularProgressWithIcon } from '../general/CircularProgressWithIcon';
 
 import CommentForm from '../comment/CommentForm';
 import CommentList from '../comment/CommentList';
+
+import { Button } from '../general/Button';
 
 import { formatTweetTime } from '../../utils/formatTweetTime';
 import { formatTweetDate } from '../../utils/formatTweetDate';
@@ -157,7 +161,9 @@ const Time = styled.time`
     }
 `;
 
-const Bio = styled.p`    
+const Message = styled.p`
+    line-height: 1.5;
+    white-space: pre-line;
     margin: 1em 0;
 
     a {
@@ -216,13 +222,13 @@ const Menu = styled.menu`
     color: ${({ theme }) => theme.colors['#71767b']};
 `;
 
-const Button = styled.button`
+const ReactionButton = styled.button`
     background: transparent;
     color: ${({ theme }) => theme.colors['#71767b']};
     border: none;
 `;
 
-const CommentIcon = styled(Button)`
+const CommentButton = styled(ReactionButton)`
     :hover {
         svg {
             background: ${({ theme }) => setRgbaValue(theme.colors.blue, 0.09)};
@@ -235,7 +241,7 @@ const CommentIcon = styled(Button)`
     }
 `;
 
-const RetweetIcon = styled(Button)`
+const RetweetButton = styled(ReactionButton)`
     path, 
     span {
         color: ${({ theme, $retweeted }) => $retweeted && theme.colors.green};
@@ -254,7 +260,7 @@ const RetweetIcon = styled(Button)`
     }
 `;
 
-const LikeIcon = styled(Button)`
+const LikeButton = styled(ReactionButton)`
     path, 
     span {
         color: ${({ theme, $liked }) => $liked && theme.colors.pink};
@@ -272,12 +278,26 @@ const LikeIcon = styled(Button)`
     }
 `;
 
+const DeleteButton = styled(Button)`
+    background: hsl(0, 85%, 60%);
+    margin: 1em 0;
+
+    display: flex;
+    align-items: center;
+    gap: .5em;
+`;
+
 const TweetDetails = () => {
+    const { dispatch: appDispatch } = useContext(AppContext);
     const { state: { tweet, currentUserId }, dispatch } = useContext(TweetContext);
 
     const { tweetId } = useParams();
 
     const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+
+    }, []);
 
     useEffect(() => {
         const getTweetDetails = async () => {
@@ -348,6 +368,10 @@ const TweetDetails = () => {
         }
     };
 
+    const showDeleteDialog = () => {
+        appDispatch({ type: 'SHOW_DELETE_DIALOG', payload: { tweetId: tweet._id } });
+    }
+
     const isTweetLiked = tweet?.likes?.includes(currentUserId);
     const isTweetRetweeted = tweet?.retweets?.includes(currentUserId);
 
@@ -382,13 +406,13 @@ const TweetDetails = () => {
                                     </Figcaption>
                                 </Figure>
                             </ArticleHeader>
-                            <Bio>
+                            <Message>
                                 <Linkify componentDecorator={(decoratedHref, decoratedText, key) =>
                                     <a href={decoratedHref} target='_blank' key={key} rel="noreferrer">{decoratedText}</a>
                                 }>
                                     {tweet.message}
                                 </Linkify>
-                            </Bio>
+                            </Message>
 
                             {
                                 tweet.images.length ? (
@@ -431,26 +455,28 @@ const TweetDetails = () => {
                             <Reactions>
                                 <Menu>
                                     <li>
-                                        <CommentIcon>
+                                        <CommentButton>
                                             <FontAwesomeIconSC icon='fa-regular fa-comment' />
-                                        </CommentIcon>
+                                        </CommentButton>
                                     </li>
                                     <li>
-                                        <RetweetIcon onClick={isTweetRetweeted ? undoRetweet : retweetTweet} $retweeted={isTweetRetweeted}>
+                                        <RetweetButton onClick={isTweetRetweeted ? undoRetweet : retweetTweet} $retweeted={isTweetRetweeted}>
                                             <FontAwesomeIconSC icon='fa-solid fa-retweet' />
-                                        </RetweetIcon>
+                                        </RetweetButton>
                                     </li>
                                     <li>
-                                        <LikeIcon onClick={isTweetLiked ? unlikeTweet : likeTweet} $liked={isTweetLiked}>
+                                        <LikeButton onClick={isTweetLiked ? unlikeTweet : likeTweet} $liked={isTweetLiked}>
                                             {
                                                 isTweetLiked ?
                                                     <FontAwesomeIconSC icon='fa-solid fa-heart' /> :
                                                     <FontAwesomeIconSC icon='fa-regular fa-heart' />
                                             }
-                                        </LikeIcon>
+                                        </LikeButton>
                                     </li>
                                 </Menu>
                             </Reactions>
+
+                            {currentUserId === tweet.userId ? <DeleteButton className='no-link' onClick={showDeleteDialog}><DeleteIcon /> Delete Tweet</DeleteButton> : null}
                         </Article>
 
                         <CommentForm />
