@@ -32,10 +32,6 @@ const Header = styled.header`
     }
 `;
 
-const ArrowBackIconSC = styled(ArrowBackIcon)`
-color: ${({ theme }) => theme.colors['#e7e9ea']};
-`;
-
 const H1 = styled.h1`
     font-size: 1.4rem;
     margin-left: 1em;
@@ -78,8 +74,6 @@ const AvatarSC = styled(Avatar)`
 `;
 
 const CameraEnhanceOutlinedIconSC = styled(CameraEnhanceOutlinedIcon)`
-    color: ${({ theme }) => theme.colors.white};
-
     position: absolute;
     top: 50%;
     left: 50%;
@@ -229,7 +223,7 @@ const EditProfile = () => {
                 const response = await axios.get('/user');
 
                 if (response?.data.success) {
-                    dispatch({ type: 'SET_PROFILE', payload: { profile: response.data.user } });
+                    dispatch({ type: 'SET_PROFILE', payload: { profile: response.data.user, edit: true } });
                 }
             } catch (error) {
                 console.log(error)
@@ -246,7 +240,7 @@ const EditProfile = () => {
             <Header>
                 <div>
                     <IconButton onClick={navigateToProfile}>
-                        <ArrowBackIconSC />
+                        <ArrowBackIcon />
                     </IconButton>
                     <H1>Edit profile</H1>
                 </div>

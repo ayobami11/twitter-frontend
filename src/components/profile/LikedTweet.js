@@ -11,6 +11,8 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { DropdownMenu } from '../general/DropdownMenu';
+
 import axios from '../../axios';
 
 import { formatTimeElapsed } from '../../utils/formatTimeElapsed';
@@ -30,6 +32,8 @@ const Li = styled.li`
 const Figure = styled.figure`
     display: flex;
     gap: 1.25em;
+
+    min-width: 225px;
 `;
 
 const Figcaption = styled.figcaption`
@@ -38,14 +42,23 @@ const Figcaption = styled.figcaption`
     width: 100%;
 `;
 
-const UserInfo = styled.div`
+const TweetHeader = styled.header`
     display: flex;
-    align-items: center;
     justify-content: space-between;
     gap: 1em;
+`;
+
+const UserInfo = styled.div`
+    display: flex;
+    justify-content: space-between;
+    gap: 1em;
+    
+    /* needed for text-ellipsis to work properly */
+    min-width: 0;
 
     margin-bottom: .75em;
-
+    flex: 1;
+    white-space: nowrap;
 `;
 
 const Author = styled.div`
@@ -206,6 +219,7 @@ const LikeButton = styled(ReactionButton)`
 
 const Time = styled.time`
     color: ${({ theme }) => theme.colors['#71767b']};
+    margin-top: .5em;
     white-space: nowrap;
     flex-shrink: 0;
 
@@ -229,56 +243,60 @@ const LikedTweet = ({ tweet, index }) => {
 
     const navigate = useNavigate();
 
-    const navigateToTweet = (event) => {
-        if (!event.target.classList.contains('no-link')
-            && ![...document.getElementsByClassName('no-link')]
-                .some(element => element.contains(event.target))) {
-            navigate(`/${tweet.handle}/status/${tweet.tweetId}`);
-        }
+    const navigateToTweet = () => {
+        navigate(`/${tweet.handle}/status/${tweet.tweetId}`);
     }
 
-    const likeTweet = async () => {
+    const likeTweet = async (event) => {
+        event.stopPropagation();
+
         try {
             const response = await axios.post(`/tweets/${tweet.tweetId}/like`);
 
             if (response?.data.success) {
-                dispatch({ type: 'HANDLE_LIKE', payload: { index, reactionTab: 'likes' } });
+                dispatch({ type: 'HANDLE_LIKE', payload: { index, tweetType: 'likedTweets' } });
             }
         } catch (error) {
             console.log(error);
         }
     };
 
-    const unlikeTweet = async () => {
+    const unlikeTweet = async (event) => {
+        event.stopPropagation();
+
         try {
             const response = await axios.delete(`/tweets/${tweet.tweetId}/unlike`);
 
             if (response?.data.success) {
-                dispatch({ type: 'HANDLE_UNLIKE', payload: { index, reactionTab: 'likes' } })
+                dispatch({ type: 'HANDLE_UNLIKE', payload: { index, tweetType: 'likedTweets' } })
             }
         } catch (error) {
             console.log(error);
         }
     };
 
-    const retweetTweet = async () => {
+    const retweetTweet = async (event) => {
+        event.stopPropagation();
+
         try {
             const response = await axios.post(`/tweets/${tweet.tweetId}/retweet`);
 
             if (response?.data.success) {
-                dispatch({ type: 'HANDLE_RETWEET', payload: { index, reactionTab: 'likes' } })
+                dispatch({ type: 'HANDLE_RETWEET', payload: { index, tweetType: 'likedTweets' } })
             }
         } catch (error) {
             console.log(error);
         }
     };
 
-    const undoRetweet = async () => {
+    const undoRetweet = async (event) => {
+        event.stopPropagation();
+
         try {
             const response = await axios.delete(`/tweets/${tweet.tweetId}/undo-retweet`);
 
             if (response?.data.success) {
-                dispatch({ type: 'HANDLE_UNDO_RETWEET', payload: { index, reactionTab: 'likes' } })
+                dispatch({ type: 'HANDLE_UNDO_RETWEET', payload: { index, tweetType: 'likedTweets' } })
             }
         } catch (error) {
             console.log(error);
@@ -299,17 +317,28 @@ const LikedTweet = ({ tweet, index }) => {
                         alt=''
                     />
                     <Figcaption>
-                        <UserInfo>
-                            <Author>
-                                <Name>
-                                    <span>{tweet.name}</span>
-                                    {tweet.verified && <VerifiedIconSC />}
-                                </Name>
-                                <Handle>@{tweet.handle}</Handle>
-                            </Author>
-                            <Time>&middot;<span>{formatTimeElapsed(tweet.createdAt)}</span></Time>
-                        </UserInfo>
+                        <TweetHeader>
 
+                            <UserInfo>
+                                <Author>
+                                    <Name>
+                                        <span>{tweet.name}</span>
+                                        {tweet.verified && <VerifiedIconSC />}
+                                    </Name>
+                                    <Handle>@{tweet.handle}</Handle>
+                                </Author>
+                                <Time>&middot;<span>{formatTimeElapsed(tweet.createdAt)}</span></Time>
+                            </UserInfo>
+
+                            <DropdownMenu
+                                currentUserId={currentUserId}
+                                userId={tweet.userId}
+                                tweetId={tweet.tweetId}
+                                index={index}
+                                message={tweet.message}
+                                images={tweet.images}
+                            />
+                        </TweetHeader>
 
                         <Message>
                             <Linkify componentDecorator={(decoratedHref, decoratedText, key) =>
@@ -335,14 +364,14 @@ const LikedTweet = ({ tweet, index }) => {
                                 </CommentButton>
                             </li>
                             <li>
-                                <RetweetButton className='no-link' onClick={
+                                <RetweetButton onClick={
                                     isTweetRetweeted ? undoRetweet : retweetTweet} $retweeted={isTweetRetweeted}>
                                     <FontAwesomeIconSC icon='fa-solid fa-retweet' />
                                     <span>{tweet.retweets.length || ''}</span>
                                 </RetweetButton>
                             </li>
                             <li>
-                                <LikeButton className='no-link' onClick={
+                                <LikeButton onClick={
                                     isTweetLiked ? unlikeTweet : likeTweet} $liked={isTweetLiked}>
                                     {isTweetLiked ?
                                         <FontAwesomeIconSC icon='fa-solid fa-heart' />

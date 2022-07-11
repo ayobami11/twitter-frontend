@@ -27,13 +27,7 @@ const Header = styled.header`
     
     border-bottom: 1px solid ${({ theme }) => theme.colors['#2f3336']};
     padding: .5em 1em;
-    `;
-
-const ArrowBackIconSC = styled(ArrowBackIcon)`
-
-    color: ${({ theme }) => theme.colors['#e7e9ea']};
-    
-    `;
+`;
 
 const H1 = styled.h1`
     font-size: 1.5rem;
@@ -97,7 +91,7 @@ const Following = () => {
         <FlexContainer>
             <Header>
                 <IconButton onClick={navigateToProfile}>
-                    <ArrowBackIconSC />
+                    <ArrowBackIcon />
                 </IconButton>
                 <H1>Following</H1>
             </Header>

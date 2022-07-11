@@ -6,7 +6,6 @@ import styled from 'styled-components';
 
 import Linkify from 'react-linkify';
 
-import { AppContext } from '../../contexts/app';
 import { TweetContext } from '../../contexts/tweet';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,14 +13,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Avatar from '@mui/material/Avatar';
 import VerifiedIcon from '@mui/icons-material/Verified';
-import DeleteIcon from '@mui/icons-material/Delete';
 
 import { CircularProgressWithIcon } from '../general/CircularProgressWithIcon';
+import { DropdownMenu } from '../general/DropdownMenu';
 
 import CommentForm from '../comment/CommentForm';
 import CommentList from '../comment/CommentList';
-
-import { Button } from '../general/Button';
 
 import { formatTweetTime } from '../../utils/formatTweetTime';
 import { formatTweetDate } from '../../utils/formatTweetDate';
@@ -60,6 +57,9 @@ const H2Nil = styled.h2`
 
 const ArticleHeader = styled.header`
     margin: 1em 0;
+
+    display: flex;
+    justify-content: space-between;
 `;
 
 const Article = styled.article`
@@ -278,31 +278,21 @@ const LikeButton = styled(ReactionButton)`
     }
 `;
 
-const DeleteButton = styled(Button)`
-    background: hsl(0, 85%, 60%);
-    margin: 1em 0;
-
-    display: flex;
-    align-items: center;
-    gap: .5em;
-`;
-
 const TweetDetails = () => {
-    const { dispatch: appDispatch } = useContext(AppContext);
     const { state: { tweet, currentUserId }, dispatch } = useContext(TweetContext);
 
     const { tweetId } = useParams();
 
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-
-    }, []);
 
     useEffect(() => {
+        const controller = new AbortController();
+
         const getTweetDetails = async () => {
             try {
-                const response = await axios.get(`/tweets/${tweetId}`);
+
+                const response = await axios.get(`/tweets/${tweetId}`, { signal: controller.signal });
 
                 if (response?.data.success) {
                     dispatch({ type: 'SET_TWEET', payload: { tweet: response.data.tweet } });
@@ -318,6 +308,12 @@ const TweetDetails = () => {
         }
 
         getTweetDetails();
+
+        return () => {
+            controller.abort();
+
+            dispatch({ type: 'SET_TWEET', payload: { tweet: null } });
+        }
     }, [dispatch, tweetId]);
 
     const likeTweet = async () => {
@@ -368,10 +364,6 @@ const TweetDetails = () => {
         }
     };
 
-    const showDeleteDialog = () => {
-        appDispatch({ type: 'SHOW_DELETE_DIALOG', payload: { tweetId: tweet._id } });
-    }
-
     const isTweetLiked = tweet?.likes?.includes(currentUserId);
     const isTweetRetweeted = tweet?.retweets?.includes(currentUserId);
 
@@ -405,6 +397,14 @@ const TweetDetails = () => {
                                         </Link>
                                     </Figcaption>
                                 </Figure>
+
+                                <DropdownMenu
+                                    currentUserId={currentUserId}
+                                    userId={tweet.userId}
+                                    tweetId={tweet._id}
+                                    message={tweet.message}
+                                    images={tweet.images}
+                                />
                             </ArticleHeader>
                             <Message>
                                 <Linkify componentDecorator={(decoratedHref, decoratedText, key) =>
@@ -475,8 +475,6 @@ const TweetDetails = () => {
                                     </li>
                                 </Menu>
                             </Reactions>
-
-                            {currentUserId === tweet.userId ? <DeleteButton className='no-link' onClick={showDeleteDialog}><DeleteIcon /> Delete Tweet</DeleteButton> : null}
                         </Article>
 
                         <CommentForm />

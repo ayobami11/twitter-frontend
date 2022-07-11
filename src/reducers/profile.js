@@ -21,11 +21,15 @@ export const reducer = (state, action) => {
     switch (action.type) {
         case 'SET_PROFILE': {
 
-            return {
-                ...state,
-                profile: action.payload.profile,
-                profileDetails: { name: action.payload.profile.name, bio: action.payload.profile.bio }
-            }
+            return action.payload.edit ?
+                {
+                    ...state,
+                    profile: action.payload.profile,
+                    profileDetails: { name: action.payload.profile.name, bio: action.payload.profile.bio }
+                } : {
+                    ...state,
+                    profile: action.payload.profile
+                }
         }
 
         case 'UPDATE_PROFILE_DETAILS':
@@ -40,10 +44,16 @@ export const reducer = (state, action) => {
                 validationMessages: { ...state.validationMessages, ...action.payload }
             };
 
-        case 'SET_CURRENT_USER_DETAILS': {
+        case 'SET_CURRENT_USER_ID': {
             return {
                 ...state,
-                currentUserId: action.payload.currentUserId,
+                currentUserId: action.payload.currentUserId
+            }
+        }
+
+        case 'SET_CURRENT_USER_HANDLE': {
+            return {
+                ...state,
                 currentUserHandle: action.payload.currentUserHandle
             }
         }
@@ -181,9 +191,9 @@ export const reducer = (state, action) => {
         }
 
         case 'HANDLE_LIKE': {
-            const tweetType = action.payload.reactionTab === 'likes' ? 'likedTweets' : 'retweetedTweets';
+            const { tweetType } = action.payload;
 
-            const tweets = state[tweetType].map((tweet, index) => {
+            const data = state[tweetType].map((tweet, index) => {
                 if (index === action.payload.index) {
                     const modifiedTweet = { ...tweet };
                     modifiedTweet.likes = [...modifiedTweet.likes, state.currentUserId];
@@ -196,15 +206,15 @@ export const reducer = (state, action) => {
 
             return {
                 ...state,
-                [tweetType]: tweets
+                [tweetType]: data
             }
 
         }
 
         case 'HANDLE_UNLIKE': {
-            const tweetType = action.payload.reactionTab === 'likes' ? 'likedTweets' : 'retweetedTweets';
+            const { tweetType } = action.payload;
 
-            const tweets = state[tweetType].map((tweet, index) => {
+            const data = state[tweetType].map((tweet, index) => {
                 if (index === action.payload.index) {
                     const modifiedTweet = { ...tweet };
                     modifiedTweet.likes = modifiedTweet.likes.filter(userId => userId !== state.currentUserId);
@@ -217,15 +227,15 @@ export const reducer = (state, action) => {
 
             return {
                 ...state,
-                [tweetType]: tweets
+                [tweetType]: data
             }
 
         }
 
         case 'HANDLE_RETWEET': {
-            const tweetType = action.payload.reactionTab === 'likes' ? 'likedTweets' : 'retweetedTweets';
+            const { tweetType } = action.payload;
 
-            const tweets = state[tweetType].map((tweet, index) => {
+            const data = state[tweetType].map((tweet, index) => {
                 if (index === action.payload.index) {
                     const modifiedTweet = { ...tweet };
                     modifiedTweet.retweets = [...modifiedTweet.retweets, state.currentUserId];
@@ -238,15 +248,15 @@ export const reducer = (state, action) => {
 
             return {
                 ...state,
-                [tweetType]: tweets
+                [tweetType]: data
             }
 
         }
 
         case 'HANDLE_UNDO_RETWEET': {
-            const tweetType = action.payload.reactionTab === 'likes' ? 'likedTweets' : 'retweetedTweets';
+            const { tweetType } = action.payload;
 
-            const tweets = state[tweetType].map((tweet, index) => {
+            const data = state[tweetType].map((tweet, index) => {
                 if (index === action.payload.index) {
                     const modifiedTweet = { ...tweet };
                     modifiedTweet.retweets = modifiedTweet.retweets.filter(userId => userId !== state.currentUserId);
@@ -259,9 +269,21 @@ export const reducer = (state, action) => {
 
             return {
                 ...state,
-                [tweetType]: tweets
+                [tweetType]: data
             }
 
+        }
+
+        // action performed when delete button in confirmation dialog is clicked
+        case 'HANDLE_TWEET_DELETION': {
+            const { tweetType } = action.payload;
+
+            const data = state[tweetType].filter((tweet, index) => index !== action.payload.index);
+
+            return {
+                ...state,
+                [tweetType]: data
+            }
         }
 
         default: {

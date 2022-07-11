@@ -3,7 +3,7 @@ import { createContext, useReducer } from 'react';
 import { initialState, reducer } from '../reducers/app';
 
 import { NotificationPopup } from '../components/general/NotificationPopup';
-import { DeleteTweetDialog } from '../components/tweet/DeleteTweetDialog';
+import { DeleteTweetDialog } from '../components/general/DeleteTweetDialog';
 
 export const AppContext = createContext(null);
 

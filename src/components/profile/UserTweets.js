@@ -8,7 +8,7 @@ import axios from '../../axios';
 
 import { ProfileContext } from '../../contexts/profile';
 
-import TweetItem from '../tweet/TweetItem';
+import UserTweet from './UserTweet';
 
 import { Button } from '../general/Button';
 
@@ -45,6 +45,8 @@ const UserTweets = () => {
 
         if (response?.data.success) {
           dispatch({ type: 'SET_TWEETS', payload: { tweets: response.data.tweets } });
+
+          dispatch({ type: 'SET_CURRENT_USER_ID', payload: { currentUserId: response.data.currentUserId } });
         }
       } catch (error) {
         console.log(error);
@@ -59,7 +61,7 @@ const UserTweets = () => {
       tweets.length ? (
         <ul>
           {tweets.map((tweet, index) => (
-            <TweetItem
+            <UserTweet
               key={tweet._id}
               tweet={tweet}
               index={index}

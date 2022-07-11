@@ -38,6 +38,8 @@ const UserLikes = () => {
 
         if (response?.data.success) {
           dispatch({ type: 'SET_LIKED_TWEETS', payload: { likedTweets: response.data.likedTweets } });
+
+          dispatch({ type: 'SET_CURRENT_USER_ID', payload: { currentUserId: response.data.currentUserId } });
         }
       } catch (error) {
         console.log(error);

@@ -1,4 +1,4 @@
-import { Outlet, useMatch, useNavigate } from 'react-router-dom';
+import { Outlet, useMatch } from 'react-router-dom';
 
 import axios from './axios';
 
@@ -57,15 +57,13 @@ const GlobalStyles = createGlobalStyle`
 const App = () => {
   const loginMatch = useMatch('/login');
 
-  const navigate = useNavigate();
-
   axios.interceptors.response.use(
     function (config) {
       return config;
     }, function (error) {
       if (error.response?.status === 401 && !loginMatch) {
         // redirects all unauthorized users to login page
-        navigate('/login');
+        window.location = '/login';
       }
 
       return Promise.reject(error);
@@ -74,18 +72,18 @@ const App = () => {
   return (
     <StyledEngineProvider injectFirst>
       <ThemeContextWrapper>
-        <AppContextWrapper>
-          <ResetStyles />
-          <GlobalStyles />
-          <UserContextWrapper>
-            <TweetContextWrapper>
-              <ProfileContextWrapper>
+        <ProfileContextWrapper>
+          <AppContextWrapper>
+            <ResetStyles />
+            <GlobalStyles />
+            <UserContextWrapper>
+              <TweetContextWrapper>
                 <Outlet />
                 <NotificationPopup />
-              </ProfileContextWrapper>
-            </TweetContextWrapper>
-          </UserContextWrapper>
-        </AppContextWrapper>
+              </TweetContextWrapper>
+            </UserContextWrapper>
+          </AppContextWrapper>
+        </ProfileContextWrapper>
       </ThemeContextWrapper>
     </StyledEngineProvider>
   );

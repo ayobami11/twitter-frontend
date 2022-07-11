@@ -1,5 +1,13 @@
 import { ThemeProvider } from 'styled-components';
 
+import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/styles';
+
+const darkTheme = createTheme({
+    palette: {
+        mode: 'dark'
+    }
+});
+
 const theme = {
     colors: {
         blue: 'rgb(29, 155, 240)',
@@ -19,5 +27,9 @@ const theme = {
 };
 
 export const ThemeContextWrapper = ({ children }) => (
-    <ThemeProvider theme={theme}>{children}</ThemeProvider>
+    <MuiThemeProvider theme={darkTheme}>
+        <ThemeProvider theme={theme}>
+            {children}
+        </ThemeProvider>
+    </MuiThemeProvider>
 );

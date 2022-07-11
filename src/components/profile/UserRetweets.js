@@ -39,6 +39,8 @@ const UserRetweets = () => {
         if (response?.data.success) {
           dispatch({ type: 'SET_RETWEETED_TWEETS', payload: { retweetedTweets: response.data.retweetedTweets } });
 
+          dispatch({ type: 'SET_CURRENT_USER_ID', payload: { currentUserId: response.data.currentUserId } });
+
         }
       } catch (error) {
         console.log(error);

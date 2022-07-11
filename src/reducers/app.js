@@ -224,8 +224,7 @@ export const reducer = (state, action) => {
                     ...state.deleteDialog,
                     open: false,
                     tweetId: '',
-                    index: null,
-                    redirect: true
+                    index: null
                 }
             }
         }

@@ -33,10 +33,6 @@ const Header = styled.header`
     gap: 1em;
 `;
 
-const ArrowBackIconSC = styled(ArrowBackIcon)`
-    color: ${({ theme }) => theme.colors['#e7e9ea']};
-`;
-
 const H1 = styled.h1`
     font-size: 1.25rem;
     margin-left: 1em;
@@ -234,7 +230,6 @@ const UserProfile = () => {
         navigate('/');
     }
 
-
     const followUser = async () => {
         try {
 
@@ -273,8 +268,13 @@ const UserProfile = () => {
                     dispatch({ type: 'SET_PROFILE', payload: { profile: response.data.user } })
 
                     dispatch({
-                        type: 'SET_CURRENT_USER_DETAILS',
-                        payload: { currentUserId: response.data.currentUserId, currentUserHandle: response.data.currentUserHandle }
+                        type: 'SET_CURRENT_USER_ID',
+                        payload: { currentUserId: response.data.currentUserId }
+                    });
+
+                    dispatch({
+                        type: 'SET_CURRENT_USER_HANDLE',
+                        payload: { currentUserHandle: response.data.currentUserHandle }
                     });
                 }
             } catch (error) {
@@ -283,6 +283,10 @@ const UserProfile = () => {
         }
 
         getUserProfile();
+
+        return () => {
+            dispatch({ type: 'SET_PROFILE', payload: { profile: null } })
+        }
     }, [dispatch, handle]);
 
     const following = state.profile?.following;
@@ -293,7 +297,7 @@ const UserProfile = () => {
 
             <Header>
                 <IconButton onClick={navigateToHome}>
-                    <ArrowBackIconSC />
+                    <ArrowBackIcon />
                 </IconButton>
                 <H1>Profile</H1>
             </Header>
@@ -317,9 +321,9 @@ const UserProfile = () => {
 
                                     {state.profile?._id === state.currentUserId ?
                                         <ButtonSC as={Link} to='edit-profile'>Edit profile</ButtonSC> :
-                                        followers?.includes(state.currentUserId) ?
-                                            <ButtonSC onClick={unfollowUser}>Following</ButtonSC> :
-                                            <FollowButton onClick={followUser}>Follow</FollowButton>
+                                    followers?.includes(state.currentUserId) ?
+                                    <ButtonSC onClick={unfollowUser}>Following</ButtonSC> :
+                                    <FollowButton onClick={followUser}>Follow</FollowButton>
                                     }
                                 </Figcaption>
                             </Figure>

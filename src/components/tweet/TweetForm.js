@@ -65,7 +65,8 @@ const Textarea = styled.textarea`
   height: min(50vh, 300px);
   line-height: 1.5;
   outline: none;
-  padding: 1em; 
+  padding: 1em;
+  padding-top: .5em;
   resize: none;
   width: 100%;
 `;
@@ -221,7 +222,7 @@ const TweetForm = () => {
         <FormContainer>
 
           <Avatar
-            sx={{ width: 50, height: 50, background: 'hsl(0, 3%, 42%)' }}
+            sx={{ width: 40, height: 40, background: 'hsl(0, 3%, 42%)' }}
             src={profile?.avatarUrl}
             alt={`${profile?.handle} profile picture`}
           />
@@ -257,4 +258,4 @@ const TweetForm = () => {
   )
 }
 
-export default TweetForm
+export default TweetForm;

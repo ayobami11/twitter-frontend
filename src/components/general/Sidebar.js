@@ -92,11 +92,6 @@ const Handle = styled.p`
     white-space: nowrap;
 `;
 
-const CloseIconSC = styled(CloseIcon)`
-    color: ${({ theme }) => theme.colors.white};
-`;
-
-
 const FollowDetails = styled.div`
     margin-top: 1em;
     display: flex;
@@ -161,7 +156,7 @@ const Sidebar = ({ isSidebarOpen, closeSidebar }) => {
                 <H1>Account info</H1>
 
                 <IconButton onClick={closeSidebar} aria-label='Close'>
-                    <CloseIconSC />
+                    <CloseIcon />
                 </IconButton>
             </Header>
 

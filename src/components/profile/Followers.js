@@ -29,12 +29,6 @@ const Header = styled.header`
     padding: .5em 1em;
 `;
 
-const ArrowBackIconSC = styled(ArrowBackIcon)`
-
-    color: ${({ theme }) => theme.colors['#e7e9ea']};
-    
-    `;
-
 const H1 = styled.h1`
     font-size: 1.5rem;
 `;
@@ -95,7 +89,7 @@ const Followers = () => {
         <FlexContainer>
             <Header>
                 <IconButton onClick={navigateToProfile}>
-                    <ArrowBackIconSC />
+                    <ArrowBackIcon />
                 </IconButton>
                 <H1>Followers</H1>
             </Header>

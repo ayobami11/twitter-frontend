@@ -9,7 +9,7 @@ import Linkify from 'react-linkify';
 import Avatar from '@mui/material/Avatar';
 import VerifiedIcon from '@mui/icons-material/Verified';
 
-import { AppContext } from '../../contexts/app';
+import { ProfileContext } from '../../contexts/profile';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -240,8 +240,8 @@ const Menu = styled.menu`
     color: ${({ theme }) => theme.colors['#71767b']};
 `;
 
-const TweetItem = ({ tweet, index }) => {
-    const { state: { currentUserId }, dispatch } = useContext(AppContext);
+const UserTweet = ({ tweet, index }) => {
+    const { state: { currentUserId }, dispatch } = useContext(ProfileContext);
 
     const navigate = useNavigate();
 
@@ -257,7 +257,7 @@ const TweetItem = ({ tweet, index }) => {
             const response = await axios.post(`/tweets/${tweet._id}/like`);
 
             if (response?.data.success) {
-                dispatch({ type: 'HANDLE_LIKE', payload: { index } })
+                dispatch({ type: 'HANDLE_LIKE', payload: { index, tweetType: 'tweets' } })
             }
         } catch (error) {
             console.log(error);
@@ -271,7 +271,7 @@ const TweetItem = ({ tweet, index }) => {
             const response = await axios.delete(`/tweets/${tweet._id}/unlike`);
 
             if (response?.data.success) {
-                dispatch({ type: 'HANDLE_UNLIKE', payload: { index } })
+                dispatch({ type: 'HANDLE_UNLIKE', payload: { index, tweetType: 'tweets' } })
             }
         } catch (error) {
             console.log(error);
@@ -285,7 +285,7 @@ const TweetItem = ({ tweet, index }) => {
             const response = await axios.post(`/tweets/${tweet._id}/retweet`);
 
             if (response?.data.success) {
-                dispatch({ type: 'HANDLE_RETWEET', payload: { index } })
+                dispatch({ type: 'HANDLE_RETWEET', payload: { index, tweetType: 'tweets' } })
             }
         } catch (error) {
             console.log(error);
@@ -299,7 +299,7 @@ const TweetItem = ({ tweet, index }) => {
             const response = await axios.delete(`/tweets/${tweet._id}/undo-retweet`);
 
             if (response?.data.success) {
-                dispatch({ type: 'HANDLE_UNDO_RETWEET', payload: { index } })
+                dispatch({ type: 'HANDLE_UNDO_RETWEET', payload: { index, tweetType: 'tweets' } })
             }
         } catch (error) {
             console.log(error);
@@ -391,4 +391,4 @@ const TweetItem = ({ tweet, index }) => {
     );
 };
 
-export default TweetItem;
+export default UserTweet;

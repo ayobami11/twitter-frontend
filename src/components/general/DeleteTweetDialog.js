@@ -5,6 +5,7 @@ import { useNavigate, useMatch } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { AppContext } from '../../contexts/app';
+import { ProfileContext } from '../../contexts/profile';
 
 import Button from '@mui/material/Button';
 
@@ -45,9 +46,15 @@ const ButtonSC = styled(Button)`
 
 export const DeleteTweetDialog = () => {
     const { state: { deleteDialog }, dispatch } = useContext(AppContext);
+    const { dispatch: profileDispatch } = useContext(ProfileContext);
 
     // checks if the current page is the tweetDetails page
+    const tweetsMatch = useMatch('/home');
     const tweetDetailsMatch = useMatch('/:handle/status/:tweetId');
+
+    const userTweetsMatch = useMatch('/:handle/tweets');
+    const userLikesMatch = useMatch('/:handle/likes');
+    const userRetweetsMatch = useMatch('/:handle/retweets');
 
     const navigate = useNavigate();
 
@@ -62,13 +69,25 @@ export const DeleteTweetDialog = () => {
             const response = await axios.delete(`/tweets/${deleteDialog.tweetId}/delete`);
 
             if (response?.data.success) {
-                dispatch({ type: 'HANDLE_TWEET_DELETION', payload: { redirect: true } });
+
+                if (tweetsMatch) {
+                    dispatch({ type: 'HANDLE_TWEET_DELETION' });
+                } else {
+                    if (tweetDetailsMatch) {
+                        navigate('/');
+                    } else if (userTweetsMatch) {
+                        profileDispatch({ type: 'HANDLE_TWEET_DELETION', payload: { index: deleteDialog.index, tweetType: 'tweets' } });
+                    } else if (userLikesMatch) {
+                        profileDispatch({ type: 'HANDLE_TWEET_DELETION', payload: { index: deleteDialog.index, tweetType: 'likedTweets' } });
+                    } else if (userRetweetsMatch) {
+                        profileDispatch({ type: 'HANDLE_TWEET_DELETION', payload: { index: deleteDialog.index, tweetType: 'retweetedTweets' } });
+                    }
+
+                    handleClose();
+                }
 
                 dispatch({ type: 'SET_ALERT', payload: { message: 'Tweet deleted successfully.' } });
 
-                if (tweetDetailsMatch) {
-                    navigate('/');
-                }
             }
         } catch (error) {
             if (error?.response) {

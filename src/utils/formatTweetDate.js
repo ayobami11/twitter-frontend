@@ -20,11 +20,5 @@ export const formatTweetDate = (dateString, profileDateJoined = false) => {
     const month = date.getMonth();
     const year = date.getFullYear();
 
-    if (profileDateJoined) {
-        return `${months[month]} ${year}`;
-
-    } else {
-        return `${months[month].substring(0, 3)} ${dateValue}, ${year}`;
-    }
-
+    return profileDateJoined ? `${months[month]} ${year}` : `${months[month].substring(0, 3)} ${dateValue}, ${year}`;
 };

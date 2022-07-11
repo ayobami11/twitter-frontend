@@ -23,7 +23,10 @@ const Images = styled.div`
 `;
 
 const Img = styled.img`
+    object-fit: contain;
     min-height: 100%;
+
+    /* border: 1px solid red; */
 `;
 
 const ImagePreview = ({ imageUrls }) => {
