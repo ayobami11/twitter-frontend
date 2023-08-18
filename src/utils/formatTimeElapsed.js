@@ -32,7 +32,8 @@ export const formatTimeElapsed = dateString => {
     timeElapsed = Math.floor(timeElapsed / 24);
     const days = timeElapsed;
 
-    if (days >= 7) return `${initialDate.getDate()} ${months[initialDate.getMonth()].substring(0, 3)}`;
+    if (days >= 365) return `${initialDate.getDate()} ${months[initialDate.getMonth()].substring(0, 3)} ${initialDate.getFullYear()}`;
+    else if (days >= 7) return `${initialDate.getDate()} ${months[initialDate.getMonth()].substring(0, 3)}`;
     else if (days) return `${days}d`;
     else if (hours) return `${hours}h`;
     else if (minutes) return `${minutes}m`;
